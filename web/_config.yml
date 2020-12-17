@@ -15,3 +15,5 @@ twitter_username: ExiledNarwal28
 github_username: ExiledNarwal28
 sass:
   sass_dir: public/css
+
+# TODO : Find a better way to redirect than in index.html
