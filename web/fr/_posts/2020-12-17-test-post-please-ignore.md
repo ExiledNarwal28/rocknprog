@@ -3,6 +3,8 @@ layout: post
 title:  "Test post please ignore"
 date:   2020-12-17
 categories: unrelated
+lang: fr
+lang-ref: test-post-please-ignore
 ---
 
 Welcome to my blog!

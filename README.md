@@ -4,6 +4,8 @@ This is my personal blog for programming and dev-related things. It uses Docker 
 
 Base repo was copied from [Joel Capillo's Dockerized Jekyll and Nginx](https://github.com/hunyoboy/dockerized-jekyll-nginx).
 
+Next, a lot of things were copied from [dwalkr's Multilingual Jekyll site](https://github.com/dwalkr/jekyll-multilingual).
+
 ## Dependencies
 
  - Docker
