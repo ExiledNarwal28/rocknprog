@@ -1,7 +1,0 @@
-build:
-  docker:
-    web: Dockerfile
-  config:
-    build_command: "jekyll build"
-run:
-  web: nginx
