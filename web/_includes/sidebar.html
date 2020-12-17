@@ -7,7 +7,9 @@
                     {{ site.title }}
                 </a>
             </h1>
-            <p class="lead">{{ site.description }}</p>
+            <p class="lead">
+                {{ site.data.translations['tagline'][page.lang] }}
+            </p>
         </div>
 
         <nav class="sidebar-nav">

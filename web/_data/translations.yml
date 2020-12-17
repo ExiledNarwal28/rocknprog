@@ -3,10 +3,13 @@ relatedPosts:
   fr: "Articles associés"
 differentLanguage:
   en: "Read this page in a different language"
-  fr: "Lire cette page dans une langue différente"
+  fr: "Lire cette page dans une autre langue"
 allPosts:
   en: "All posts"
   fr: "Tous les articles"
 allRightsReserved:
   en: "All rights reserved"
   fr: "Tous droits réservés"
+tagline:
+  en: "Let code be monospaced prose."
+  fr: "Laisser le code être de la prose en monospace."
