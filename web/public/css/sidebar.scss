@@ -5,13 +5,13 @@
 @import "mixins";
 
 .sidebar-img {
-    border-radius: 100%;
-    max-width: 120px;
-    margin: auto;
+  border-radius: 100%;
+  max-width: 120px;
+  margin: auto;
 
-    @include md {
-        max-width: 100%;
-    }
+  @include md {
+    max-width: 100%;
+  }
 }
 
 ul.lang-options {
