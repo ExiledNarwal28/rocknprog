@@ -1,10 +1,10 @@
-ROM jekyll/jekyll:3.8.3 as build-stage
+FROM jekyll/jekyll:latest as build-stage
 
 ARG PORT
 
 WORKDIR /tmp
 
-COPY Gemfile* ./
+COPY web/Gemfile* ./
 
 RUN bundle install
 
@@ -12,13 +12,13 @@ RUN echo $PORT
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY web/* .
 
 RUN chown -R jekyll .
 
 RUN jekyll build
 
-FROM nginx:alpine
+FROM nginx:latest
 
 COPY --from=build-stage /usr/src/app/_site/ /usr/share/nginx/html
 
