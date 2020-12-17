@@ -1,0 +1,6 @@
+debug.log
+.idea
+.sass-cache
+.jekyll-metadata
+*.iml
+
