@@ -1,5 +1,5 @@
 ---
 layout: index
-title: Latest Posts
-lang: en
+title: Articles récents
+lang: fr
 ---
