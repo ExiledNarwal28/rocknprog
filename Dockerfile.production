@@ -4,7 +4,6 @@ CMD jekyll build
 
 FROM nginx:latest
 
-WORKDIR /
 COPY web/_site /var/www/public
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/html/404.html /usr/share/nginx/html/404.html
