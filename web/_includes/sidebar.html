@@ -26,6 +26,9 @@
             {% endif %}
             {% endfor %}
         </nav>
+
+        {% include language-switcher.html %}
+
         <p>&copy; {{ site.time | date: '%Y' }}. {{ site.data.translations['allRightsReserved'][page.lang] }}</p>
     </div>
 </div>
