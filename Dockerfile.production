@@ -1,10 +1,10 @@
-FROM jekyll/jekyll:latest
-
 MAINTAINER Fabien Roy
+
+FROM jekyll/jekyll:latest
 
 CMD jekyll build
 
-FROM nginx:1.19.6
+FROM nginx:latest
 
 COPY web/_site /var/www/public
 COPY nginx/nginx.conf /etc/nginx/nginx.conf

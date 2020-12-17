@@ -1,6 +1,6 @@
-FROM jekyll/jekyll:latest
-
 MAINTAINER Fabien Roy
+
+FROM jekyll/jekyll:latest
 
 ARG build_command
 ENV BUILD_COMMAND ${build_command}
