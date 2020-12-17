@@ -1,10 +1,11 @@
 ---
-title: About the Author
+title: À propos de l'auteur
 layout: page
-lang: en
+lang: fr
 lang-ref: about
 
 ---
+
 ![](/public/img/soccer-chimp.jpg)
 
-Just a soccer-loving chimp trying to find his way in the world.
+Faut clairement changer cette page.

@@ -2,6 +2,7 @@
     <div class="container sidebar-sticky">
         <div class="sidebar-about">
             <h1>
+                <!-- TODO : Change base url for a localized one -->
                 <a href="/">
                     {{ site.title }}
                 </a>
@@ -10,12 +11,9 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="/{{ page.lang }}">All Posts</a>
-
-            {% comment %}
-            The code below dynamically generates a sidebar nav of pages with
-            `layout: page` in the front-matter. See readme for usage.
-            {% endcomment %}
+            <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="/{{ page.lang }}">
+                {{ site.data.translations['allPosts'][page.lang] }}
+            </a>
 
             {% assign pages_list = site.pages | where:"lang", page.lang %}
             {% for node in pages_list %}
@@ -26,6 +24,6 @@
             {% endif %}
             {% endfor %}
         </nav>
-        <p>&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
+        <p>&copy; {{ site.time | date: '%Y' }}. {{ site.data.translations['allRightsReserved'][page.lang] }}</p>
     </div>
 </div>
