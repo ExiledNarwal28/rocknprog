@@ -16,7 +16,7 @@ Next, a lot of things were copied from [dwalkr's Multilingual Jekyll site](https
 ### Start development environment
 
 ```shell
-docker-compose -f docker-compose-dev.yml up --build; docker-compose -f docker-compose-dev.yml down
+docker-compose -f docker-compose.yml up --build; docker-compose -f docker-compose.yml down
 ```
 
 ### Start production environment
