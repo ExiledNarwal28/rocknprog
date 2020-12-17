@@ -17,3 +17,5 @@ sass:
   sass_dir: public/css
 
 # TODO : Find a better way to redirect than in index.html
+exclude:
+  - Rakefile
