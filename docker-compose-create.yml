@@ -1,7 +1,0 @@
-version: '3'
-
-services:
-  jekyllcreate:
-    image: jekyll/jekyll:latest
-    volumes:
-      - $PWD:/srv/jekyll

@@ -11,8 +11,14 @@ Base repo was copied from [Joel Capillo's Dockerized Jekyll and Nginx](https://g
 
 ## Project setup
 
-### Run Docker Compose
+### Start development environment
 
 ```shell
-docker-compose up -d
+docker-compose -f docker-compose-dev.yml up --build; docker-compose -f docker-compose-dev.yml down
+```
+
+### Start production environment
+
+```shell
+docker-compose -f docker-compose-prod.yml up --build --detach
 ```
