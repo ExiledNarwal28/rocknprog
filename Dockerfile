@@ -1,5 +1,3 @@
-MAINTAINER Fabien Roy
-
 FROM jekyll/jekyll:latest
 
 ARG build_command
