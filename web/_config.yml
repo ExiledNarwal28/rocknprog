@@ -1,18 +1,18 @@
-# Dependencies
 highlighter: pygments
 
-# Permalinks
 permalink: pretty
 
-# Setup
 title: Rock n' Prog
 email: fabienroy28@gmail.com
 tagline: "It's not code : it's monospaced prose."
 description: My personal blog for programming and dev-related things.
+
 baseurl: /
 url: "" # TODO : The base hostname & protocol for your site, e.g. http://example.com
+
 twitter_username: ExiledNarwal28
 github_username: ExiledNarwal28
+
 sass:
   sass_dir: public/css
 
