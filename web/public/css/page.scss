@@ -1,0 +1,16 @@
+---
+# Those are somehow necessary for Jekyll
+---
+
+@import "mixins";
+
+img[alt=author] {
+  max-width: 200px;
+  margin: auto;
+
+  @include md {
+    max-width: 300px;
+    float: right;
+  }
+}
+
