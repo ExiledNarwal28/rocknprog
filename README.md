@@ -19,6 +19,8 @@ Next, a lot of things were copied from [dwalkr's Multilingual Jekyll site](https
 docker-compose -f docker-compose.yml up --build; docker-compose -f docker-compose.yml down
 ```
 
-### Start production environment
+### Push to production environment
 
-Push to master. The rest is magic.
+```shell
+git push subtree --prefix web heroku master
+```
