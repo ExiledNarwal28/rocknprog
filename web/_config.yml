@@ -8,7 +8,7 @@ tagline: "It's not code : it's monospaced prose."
 description: My personal blog for programming and dev-related things.
 
 baseurl: /
-url: "" # TODO : The base hostname & protocol for your site, e.g. http://example.com
+url: "https://rocknprog.com"
 
 twitter_username: ExiledNarwal28
 github_username: ExiledNarwal28
