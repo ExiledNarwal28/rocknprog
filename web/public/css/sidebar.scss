@@ -22,6 +22,11 @@ ul.lang-options {
     list-style: none;
     display: inline-block;
     margin-right: 1em;
+    margin-left: 1em;
+
+    @include md {
+      margin-left: 0;
+    }
 
     &:hover {
       opacity: 0.6;
