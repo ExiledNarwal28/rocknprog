@@ -1,7 +1,7 @@
 <div class="sidebar">
     <div class="container sidebar-sticky">
         <div class="sidebar-about">
-            <img src="/public/img/hackerman.jpg" alt="" class="sidebar-img" />
+            <img src="/public/img/hackerman.jpg" alt="" class="sidebar-img"/>
             <h1>
                 <a href="/{{ page.lang }}">
                     {{ site.title }}
@@ -21,19 +21,37 @@
             {% for node in pages_list %}
             {% if node.title != null %}
             {% if node.layout == "page" %}
-            <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ node.url }}">{{ node.title }}</a>
+            <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ node.url }}">{{
+                node.title }}</a>
             {% endif %}
             {% endif %}
             {% endfor %}
         </nav>
 
-        {% include language-switcher.html %}
-
-        <ul class="about-links">
-            <li><a href="https://www.youtube.com/channel/UCJsy2UMYdbwEnYSnWFpsLsA" title="YouTube"><i class='fa fa-youtube'></i></a></li>
-            <li><a href="https://github.com/ExiledNarwal28" title="GitHub"><i class='fa fa-github'></i></a></li>
-            <li><a href="https://www.linkedin.com/in/fabienroy/" title="LinkedIn"><i class='fa fa-linkedin'></i></a></li>
+        <ul class="sidebar-icons">
+            <li><a href="https://www.youtube.com/channel/UCJsy2UMYdbwEnYSnWFpsLsA" title="YouTube"><i
+                    class='fab fa-youtube'></i></a></li>
+            <li><a href="https://github.com/ExiledNarwal28" title="GitHub"><i class='fab fa-github'></i></a></li>
+            <li><a href="https://www.linkedin.com/in/fabienroy/" title="LinkedIn"><i class='fab fa-linkedin'></i></a>
+            </li>
         </ul>
+
+        {% assign posts=site.posts | where:"lang-ref", page.lang-ref | sort: 'lang' %}
+        {% if posts.size == 0 %}
+        {% assign posts=site.pages | where:"lang-ref", page.lang-ref | sort: 'lang' %}
+        {% endif %}
+        {% if posts.size > 1 %}
+        <ul class="sidebar-icons">
+            {% for post in posts %}
+            {% if post.lang %}
+            <li><a title="{{ site.data.translations['viewIn'][post.lang] }} {{ site.data.languages[post.lang].label }}"
+                   class="{{post.lang}}" href="{{ site.base-url }}{{ post.url }}">
+                {{ site.data.languages[post.lang].icon }}
+            </a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
 
         <p>&copy; {{ site.time | date: '%Y' }}. {{ site.data.translations['allRightsReserved'][page.lang] }}</p>
     </div>
