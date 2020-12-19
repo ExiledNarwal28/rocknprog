@@ -16,9 +16,6 @@ github_username: ExiledNarwal28
 sass:
   sass_dir: public/css
 
-plugins:
-  - jekyll-redirect-from
-
 exclude:
   - Rakefile
   - static.json
