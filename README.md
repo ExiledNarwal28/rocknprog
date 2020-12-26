@@ -19,6 +19,8 @@ Next, a lot of things were copied from [dwalkr's Multilingual Jekyll site](https
 docker-compose -f docker-compose.yml up --build; docker-compose -f docker-compose.yml down
 ```
 
+You can then access the website at [http://localhost](http://localhost).
+
 ### Push to production environment
 
 ```shell
