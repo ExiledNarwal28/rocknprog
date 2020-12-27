@@ -15,7 +15,7 @@ Here, I mostly talk about my channel and the programming project I propose. So, 
 
  - My name is Fabien Roy. I am finishing a computer engineering degree and I got a degree in informatics. During my studies, I worked 5 years in software development. I love all programming-related things, clean code and software architecture.
  - My channel will feature some pretty laid-back videos on which I will talk about subjects related to software development. What I talk about will be oriented by the project, the comments I get and what I personally want to talk about.
- - The project will be an API written in Java (Maven) that will use technologies like GitHub, RAML, Postman and Heroku. It's a project that should resemble what we have to do at school or at work. It is, of course, fictive : it's an application that handles a space elevator. My next video will go further into detailed the use-cases for this app.
+ - The project will be an API written in Java (Maven) that will use technologies like GitHub, RAML, Postman and Heroku. It's a project that should resemble what we have to do at school or at work. It is, of course, fictive : it's an application that handles a space elevator. My next video will go further into detailing the use-cases for this app.
 
 Last thing : my videos will not go into programming basics. For this, I can recommend the following websites that covers about all there is to know.
 
