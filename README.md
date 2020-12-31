@@ -13,6 +13,12 @@ Next, a lot of things were copied from [dwalkr's Multilingual Jekyll site](https
 
 ## Project setup
 
+### Install & update development environment
+
+```shell
+docker-compose run jekyllbuild bundle
+```
+
 ### Start development environment
 
 ```shell
