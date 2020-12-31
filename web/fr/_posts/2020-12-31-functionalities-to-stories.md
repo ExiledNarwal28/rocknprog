@@ -4,7 +4,7 @@ title:  "De fonctionnalités à récits (stories)"
 date:   2020-12-31
 categories: project
 lang: fr
-lang-ref: functionnalities-to-stories
+lang-ref: functionalities-to-stories
 ---
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/T-DEoxwhnQA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -42,7 +42,7 @@ Voici la liste de fonctionnalités que j’ai écris pour l’application de ges
 
 Donc, ça c’est les fonctionnalités auxquelles j’ai pensé. On va peut-être en ajouter d’autres, j’vous laisse me donner des suggestions. Mais, par contre, sachez qu’avant même de sauter dans le code, j’ai beaucoup de choses à couvrir parce que je tiens à partir de zéro.
 
-Good, donc, on est rendu à la prochaine étape : les récits. J’ai eu des projets où on me donnait directement les récits plutôt que juste les fonctionnalités. Comme c’est pas toujours le cas, on va faire ça ensemble.
+Good, donc, on est rendu à la prochaine étape : les récits (et personas). J’ai eu des projets où on me donnait directement les récits plutôt que juste les fonctionnalités. Comme c’est pas toujours le cas, on va faire ça ensemble.
 
 ## Personas
 
@@ -51,11 +51,11 @@ La première étape, c’est de déterminer les personas. C’est quoi ça? C’
 ![Exemple de persona](/public/img/posts/example-persona.png)
 *(exemple de persona, tiré du [blogue de Roman Pichler](https://www.romanpichler.com/blog/persona-template-for-agile-product-management/))*
 
-Aussi, sidenote, c’est bon d’avoir plusieurs personas pour les mêmes fonctionnalités. Par exemple, pour l’achat de passes, y’a beaucoup de monde différent qui peuvent faire les mêmes actions. Ces gens-là ont pas tous le même background et les mêmes besoins. Là, on fait un API qui reçoit des requêtes simples, on fait pas un site web ou une app mobile par dessus. Par contre, si on avait à le faire, c’est bon d’avoir en tête plusieurs façon différentes d’utiliser l’app pour accommoder tout le monde!
+Aussi, side note, c’est bon d’avoir plusieurs personas pour les mêmes fonctionnalités. Par exemple, pour l’achat de passes, y’a beaucoup de monde différent qui peuvent faire les mêmes actions. Ces gens-là ont pas tous le même background et les mêmes besoins. Là, on fait un API qui reçoit des requêtes simples, on fait pas un site web ou une app mobile par dessus. Par contre, si on avait à le faire, c’est bon d’avoir en tête plusieurs façon différentes d’utiliser l’app pour accommoder tout le monde!
 
 Donc, comment on les nomme nos deux personas? Moi je dis que l’utilisateur qui achète des passes et qui se sert de l'ascenseur c’est Bob. Pis la personne qui crée des rapports, c’est Alice. Les noms, ça l’air niaiseux, mais ça ajoute du piquant à notre doc pis ça nous rappelle qu’on fait ça pour du monde, pis pas juste pour des données qui passe d’un boutte à l’autre de l’app.
 
-J’vais vous lire rapidement ce que j’ai écrit. Yep, c’est en anglais (comme les fonctionnalités). Au moment où c’est dans le repo et le codebase, je pense qu’on doit produire de quoi qui peut être compris par la plus grande quantité de monde possible. Ça aide au partage de connaissance et ça permet d’ouvrir les frontières de qui peut potentiellement aider avec le projet!
+J’vais vous laisser lire ce que j’ai écrit. Yep, c’est en anglais (comme les fonctionnalités). Au moment où c’est dans le repo et le codebase, je pense qu’on doit produire de quoi qui peut être compris par la plus grande quantité de monde possible. Ça aide au partage de connaissance et ça permet d’ouvrir les frontières de qui peut potentiellement aider avec le projet!
 
 ```markdown
 ## Bob - User of passes
@@ -83,9 +83,9 @@ Good, les personas c’est fait! On passe aux récits / stories. C’est quoi ç
 
 Ok, on va voir trois stories ensemble pis je vais présenter vite le reste. On va faire la création d’utilisateur et l’achat de passe.
 
-Une bonne pratique est de regrouper les récits dans des aventures, qui regroupent les récits qui vont ensemble.
+Une bonne pratique est de regrouper les récits dans des aventures (ou epics), qui regroupent les récits qui vont ensemble.
 
-On a Bob. Bob veut acheter des passes d’accès. Pour ça, il doit d’abord se faire un utilisateur et ensuite acheter une passe. On a besoin de quelles informations? Normalement, je dirais que le courriel c’est en masse. Par contre, on doit penser à ce qu’on a besoin dans l’app. On fait quoi? On fait une app de gestion d’ascenseur spatial. Là, c’est fictif mais on va quand même faire comme si. On a besoin d’un courriel parce que ça va être un identifiant unique pis, ben, c’est toujours pratique. Mais à part ça? Moi je dis qu’on a seulement besoin du poids pis de la taille. En tout cas, c’est ce qu’on va assumer.
+On a Bob. Bob veut acheter des passes d’accès. Pour ça, il doit d’abord se faire un utilisateur et ensuite acheter une passe. On a besoin de quelles informations? Normalement, je dirais que le courriel et le nom c’est en masse. Par contre, on doit penser à ce qu’on a besoin dans l’app. On fait quoi? On fait une app de gestion d’ascenseur spatial. Là, c’est fictif mais on va quand même faire comme si. On a besoin d’un courriel parce que ça va être un identifiant unique pis, ben, c’est toujours pratique. Mais à part ça? Moi je dis qu’on a seulement besoin du poids pis de la taille. En tout cas, c’est ce qu’on va assumer.
 
 ```markdown
 ### Adventure 1 : User creation
@@ -135,7 +135,7 @@ Bob then expects to receive an access pass code, which will be used to access th
 ```
 *(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
 
-Ok, on s’éternise. Je vais montrer vite le reste des récits avec vous et préciser ce qui est important. Notez que tout cela est disponible sur le wiki du projet. Tout ça est disponible sur GitHub. Je vais mettre le lien dans la description!
+Ok, on s’éternise. Je vais montrer vite le reste des récits avec vous et préciser ce qui est important.
 
 Pour l’aventure 2, la création / achat de passes d’accès, il suffit d’avoir un récit par période de passe d’accès et un récit pour lister les passes. Encore une fois, je mets le paquet pas mal. Je préfère avoir trop d'informations sur ce qu’on doit faire que pas assez. Oubliez pas que dans un contexte scolaire, vous pouvez ajouter des récits pour vous, si vous trouvez que trop de choses sont implicites et méritent de la précision!
 
@@ -210,7 +210,7 @@ Si vous avez pas remarqué jusqu’à date, je catégorise un peu mes récits en
 
 Dernière aventure, 5 : Les rapports.
 
-Pour ça, on va utiliser une architecture de rapport style scope-period-dimension-metric. On va revenir à ces concepts là dans une autre vidéo, mais en gros, chaque récit est techniquement une métrique qu’on veut calculer dans l’app. On peut aggloméré les données (genre, max, min, …) et on peut dimensionner (séparer) les données des métriques selon des critères. Ça se peut que ça semble nébuleux et overkill, mais c’est le fun pis c’est propre fait que eh.
+Pour ça, on va utiliser une architecture de rapport style scope-period-dimension-metric. On va revenir à ces concepts là dans un autre article, mais en gros, chaque récit est techniquement une métrique qu’on veut calculer dans l’app. On peut aggloméré les données (genre, max, min, …) et on peut dimensionner (séparer) les données des métriques selon des critères. Ça se peut que ça semble nébuleux et overkill, mais c’est le fun pis c’est propre fait que eh.
 
 ![Architecture de reporting](/public/img/posts/diagram-reporting.png)
 *(architecture de reporting de style scope-period-metric-dimension)*
@@ -273,7 +273,7 @@ Un autre truc que j’ai pas encore mentionné, c’est le prix des passes d’a
 
 Boooooon.
 
-Alright la gang, on a des récits. J’espère que ce vidéo vous a aidé à mieux comprendre comment passer d’une liste de fonctionnalités à des aventures et des récits. Et, aussi, c’est quoi tout ça.
+Alright la gang, on a des récits. J’espère que cet article vous a aidé à mieux comprendre comment passer d’une liste de fonctionnalités à des aventures et des récits. Et, aussi, c’est quoi tout ça.
 
 Dans le prochain article, on va passer de récits à des cas d’utilisation, des use-case.
 
