@@ -11,7 +11,7 @@ lang-ref: functionalities-to-stories
 
 Hi!
 
-Today, I will present to you the first part of a guide to go from a list of functionalities to stories to use-cases. I decided to cut this guide in two so I can present some concepts better. If you want to see how to go from stories to use-cases, check out the next article, "From stories to use-cases" (I will link it here when it will be out).
+Today, I will present to you the first part of a guide to go from a list of functionalities to stories to use-cases. I decided to cut this guide in two so I can present some concepts better. If you want to see how to go from stories to use-cases, check out the next article, ["From stories to use-cases"]({% post_url 2021-01-08-stories-to-use-cases %}).
 
 Alright.
 

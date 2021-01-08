@@ -1,49 +1,49 @@
 ---
 layout: post
-title:  "De récits à cas d'utilisation (use-cases)"
+title:  "From stories to use-cases"
 date:   2021-01-08
 categories: [project, documentation]
-lang: fr
+lang: en
 lang-ref: stories-to-use-cases
 ---
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ddQfKbyG_fA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Salut!
+Hi!
 
-Aujourd’hui on saute dans les use-cases. La dernière fois, on a changé une liste de fonctionnalités en récits et, maintenant, on est rendu à convertir ça en cas d’utilisation.
+Today, we're jumping into use-cases. Last time, we changed a list of functionalities to a list of stories and, now, it's time to convert all that to use-cases.
 
-Si ce qui vous intéresse c’est d’aller de fonctionnalités à stories, j’vous envoie sur mon dernier article, ["De fonctionnalités à récits (stories)"]({% post_url 2020-12-31-functionalities-to-stories %}). Sinon, restez avec moi, on va faire des beaux use-cases.
+If what you're interested in is to go from functionalities to stories, let me send you to my previous post, ["From functionalities to stories"]({% post_url 2020-12-31-functionalities-to-stories %}). Otherwise, stick with me, we'll make some beautiful use-cases.
 
-J'vous invite à lire la liste de récits qu'on a, disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories), et on va passer au next. En gros, on a :
+Let me also invite you to read the list of stories that we got, hosted on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories). Briefly, we got : 
 
- - Aventure 1 : Création d’utilisateurs
- - Aventure 2 : Achat et listage de passes d’accès à l’ascenseur
- - Aventure 3 : Accès à l’ascenseur avec une passe d’accès
- - Aventure 4 : Paiement de factures
- - Aventure 5 : Rapports d’événements (on veut obtenir des rapports complets pour des données de l’app)
-   
-Ok. Les use-cases.
+- Adventure 1 : User creation
+- Adventure 2 : Access pass creation and listing
+- Adventure 3 : Elevator access using an access pass
+- Adventure 4 : Bill payment and listing
+- Adventure 5 : Event reporting (we want to generate complete reports for some of the app's data)
 
-## Qu'est-ce qu'un cas d'utilisation?
+Ok. Use-cases.
 
-C’est quoi ça? Un cas d’utilisation [c’est comment, au plan technique, fonctionnel, les utilisateurs interagissent avec votre application et dans quel but](https://en.wikipedia.org/wiki/Use_case). Dans les récits, j’avais utilisé des personas. Ici, on va traduire ça en acteurs / actrices de l’app.
+## What is a use-case?
 
-![Exemple de cas d'utilisation, sous forme de diagramme](/public/img/posts/example-use-case-diagram.png)
-*(exemple de cas d'utilisation, sous forme de diagramme, tiré de [Wikimedia](https://commons.wikimedia.org/wiki/File:Use_case_restaurant_model.svg))*
+What's that? A use cas is [how, from a technical, functionnal, point of view, users interact with your app and to which end](https://en.wikipedia.org/wiki/Use_case). In the stories, I used personas. Here, we'll translate those into actors of the app.
 
-Souvent, on retrouve ça sous forme de diagrammes. C’est des schémas des exigences fonctionnelles de votre application, donc de vos fonctionnalités. Ici, je vais plutôt y aller textuellement avec un beau template que j’ai trouvé en ligne.
+![Example of a use-case diagram](/public/img/posts/example-use-case-diagram.png)
+*(example of a use-case diagram, from [Wikimedia](https://commons.wikimedia.org/wiki/File:Use_case_restaurant_model.svg))*
 
-![Exemple de cas d'utilisation textuel](/public/img/posts/example-use-case-text.png)
-*(exemple de cas d'utilisation textuel, tiré du [blogue de Warren Lynch](https://warren2lynch.medium.com/use-case-description-example-4b04280d6435))*
+In the wild, we'll most likely find them in their diagram form. Those a schemas of the functional requirements of your app, so, of your functionalities. Here, I'll instead go for a textual approach with a nice template I found online.
 
-Moi, je vais écrire directement les requêtes et réponses en JSON attendues par la couche d’API. De la documentation, tant qu’à la faire, autant la faire pour qu’elle soit explicative et pratique. Ma documentation d’API, rendu là, sera pas mal semblable à mes cas d’utilisation. Mais, c’est ça le but : que le livrable final réponde le plus possible à que ce qui est demandé. Si les calls à faire sont pareils aux exigences fonctionnelles fixées, ça veut dire qu’on a fait notre job comme il faut.
+![Example de textual use-case](/public/img/posts/example-use-case-text.png)
+*(example of a textual use-case, from [Warren Lynch's blog](https://warren2lynch.medium.com/use-case-description-example-4b04280d6435))*
 
-Je vais décrire des cas d’utilisation, leurs étapes (actions) et toutes leurs conséquences possibles en fonction des variantes (extensions). Pour ça, je vais traduire trois récits en cas d'utilisation.
+Personally, I'll write directly the JSON requests and responses sent and received by the API layer. Documentation, since we have to write some, it's better to make it as descriptive and useful as possible. When it will be time to write the API documentation, it will pretty much look like the use-cases. But hey, that's the goal : that the final product responds as perfectly as possible to what is asked. If the API calls are the same as the functional requirements, well, that simply means the job is done.
 
-First : On a groupé nos stories en aventures / epics. Good. Comment on groupe nos use-cases? De mon bord, j’vais juste faire des pages différentes sur mon wiki. J’vais avoir des use-cases de structure très similaire à mes récits pour montrer clairement le lien entre les deux.
+I'll describe some use-cases, their steps (actions) and all the possible consequences of their variants (extensions). For this, I'll translate three stories into use-cases.
 
-## Cas d'utilisation : Création d’utilisateur
+First, we grouped stories into adventures / epics. Good. How do we group our use-cases? In my case, I'll make separate pages on my wiki. I'll have the same grouping for my use-cases as the one I used for my stories. This way, the link between the two documentation artifacts will be clear.
+
+## Use-case : User creation
 
 ```markdown
 Bob wants to create a user. They enter the following information : 
@@ -55,42 +55,42 @@ Bob wants to create a user. They enter the following information :
 
 Bob wants to receive an email confirming their user creation.
 ```
-*(récit de création d'utilisateur sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
+*(story of user creation on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
 
-On va faire le use-case de la création d’utilisateur. Si on lit le récit, il s’agit d’envoyer des données valides pour créer le compte et c’est tout. Good, on va faire ça. Un seul use-case pour ce récit-là.
+We'll make the use-case for user creation. If we read the story, it's only about sending valid data to create an account. That's a single use-case.
 
-En passant, y’a des trucs qui ont changés dans les récits parce que j’trouvais que ça faisait pas de sens. J’vais y revenir rendu là. Ici, j’ai changé le poids de grammes à kilogrammes. Aussi, on veut recevoir un courriel qui confirme la création d'utilisateur.
+By the way, some things have changed in to stories because they didn't make sens. I'll come back to it when it's the case. Here, I changed the weight from grams to kilograms. Also, we want to receive an email confirmation for the user creation.
 
- - Description : “Une personne veut créer un utilisateur pour accéder aux fonctionnalités de l’application”
- - Acteurs : On avait Bob et Alice, mais là on veut ça sous forme de rôle. Ici, c’est “Utilisateur de l’ascenseur”.
- - Pré-condition : L’email n’existe pas dans le système.
- - Post-condition : On veut envoyer un courriel.
-   
-Good. Alors c’est quoi les actions pour ça?
+ - Description : “A non-user creates a user to access the users' functionalities of the application"
+ - Actors : We had Bob and Alice, but, here, we want those as roles. Here, it's "Elevator users".
+ - Pré-condition : The user's email must not already be in use
+ - Post-condition : We want to send en email
 
- 1. On entre les informations pour créer le compte. On va spécifier les types des attributs JSON, pis on va donner un exemple. Les exemples, on va les copier-coller dans la doc des calls d’API rendu là. Aussi, cette étape implique de vérifier les données qu’on envoie. 
- 2. On valide que l’email existe pas déjà. 
- 3. On répond l’account ID avec un location header du call HTTP.
-    
-Nice! J’avais parlé d’extensions, mais c’est quoi ça? On peut voir ça comme les exceptions de chaque étape. C’est pas mal littéralement les types d’exceptions, que notre domaine, que notre app, va handler. Pour chaque donnée qu’on envoie, il peut y avoir aucune, une ou plusieurs erreurs possibles. Histoire d’aider le monde qui se sert de l’app, on va fournir un code d’erreur pis une description assez solide.
+Good. What are the actions?
 
-Même si notre app c’est un simple API qui répond et reçoit des calls HTTP en JSON, on va documenter nos erreurs le plus possible. C’est pas parce qu’on fait juste un backend pis qu’on va peut-être être les seuls à y faire un frontend qu’on va pas couvrir l’éventuelle possibilité que quelqu’un d’autre travaille sur nos affaires. Histoire d’être un bon samaritain, on va être précis et descriptif le plus possible, surtout quand c’est pour faire planter des calls.
+ 1. We enter the required information to creation an account. We'll specify the JSON data types and we'll give an example. The examples we'll be copy-pasted into the API documentation for each call. Also, this step implies that the sent information is validated.
+ 2. We validated that the email does not already exist.
+ 3. We respond the account ID with a location header of the HTTP call.
+
+Nice! I talked about extensions, so what are those? We could see them as exceptions for each step. It's quite literally the exception types that our domain, our application, will handle. For each piece of data received, we can have none, one or many possible errors. We'll provide an error code and a description to help people using our app.
+
+Here if our app is a simple API that responds and receives HTTP calls as JSON, we'll describe our errors as much as possible. It's not because we're only doing a backend and that we might be the only ones making a frontend for it that we won't think about the eventual possibility that someone else works on our stuff. Let's be good people and be ultra-precise, especially when it comes to requests getting refused.
 
 Ok.
 
-Question de même? C’est quoi les types possibles pour un attribut JSON? [Checkez ben ça.](https://www.w3schools.com/js/js_json_datatypes.asp) Y’a six types différents. Donc, si tu veux un chiffre comme type d’attribut, un number, ça veut dire que y’a cinq façons différentes de faire potentiellement planter ton call, en plus de tes règles de domaines pis des formats que tu veux.
+Quick question. What are the possible data types for a JSON attribute? [Check this out.](https://www.w3schools.com/js/js_json_datatypes.asp) There are six different types. That means that if you want a number as an attribute, there are five possible ways to obliterate your call, on top of your domain rules and required formats.
 
-On a de la job. Listons les extensions pour chaque étape.
+We got job to do. Let's list the possible extensions for each step.
 
- - 1a. On envoie quoi en premier? Le courriel. Comment il peut être invalide? Si ton courriel est pas du bon format, ça marche pas. J’avais parlé des autres types que string? Le format, techniquement, ça couvre ça aussi. C’est une erreur assez générale pour ça. Oubliez pas que quand vous envoyez pas un attribut JSON à Java, quand il le sérialise en objet, la donnée membre est juste nulle. Là, je parle pas de si vous avez des décorateurs / règles plus précises ou si vous utilisez Jackson. En tout cas, on s’en rejase dans un autre article.
- - 1b. Le nom complet. On veut quoi? Un string non-vide.
- - 1c. Le poids? Un nombre positif. Pas besoin de vérifier si la donnée est débile.
- - 1d. La taille? Idem, un nombre positif. 
- - 2e. On valide si le courriel existe dans le système. La seule chose qui peut faire planter, c’est si l’email existe déjà.
-   
-L’étape 3, est-ce qu’elle peut planter? Comme les autres étapes, elle peut planter si l’app plante elle-même. Genre, un bug, un throw non couvert. On va lâcher un erreur 500 si ça arrive, mais ça veut dire que le problème est de notre bord.
+ - 1a. What do we send first? An email address. How could be invalid? If your email isn't of the right format, it won't work. I wrote about other data types, but format do really cover all of that. Do not forget that not sending a JSON attribute serializes a null value in Java. That is considering you don't use special decorators or rules and that you're not using Jackson. Anyways, that's a story for another post.
+ - 1b. Full name. What do we want? A non-empty string.
+ - 1c. Weight? A positive number. No need to validate stupid values.
+ - 1d. Height? Same, a positive number.
+ - 2e. We validate that the email do not already exist within our system. The only thing that could go wrong, is if that email is already there.
 
-Voici le use-case que ça donne : 
+Is there anything that could make the step 3 go wrong? Sure, like all other steps, if the app itself goes wrong. Like, a bug or an unhandled throw. We'll send an error 500 if that happens, but that means it's our problem.
+
+Here's the use-case : 
 
 <table>
   <tr>
@@ -217,7 +217,9 @@ Voici le use-case que ça donne :
     </td>
   </tr>
 </table>
-*(cas d'utilisation de création d'utilisateur sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-User-creation))*
+*(use-case of user creation on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-User-creation))*
+
+___
 
 ## Cas d'utilisation : Achat de passe d’accès à usage unique
 
