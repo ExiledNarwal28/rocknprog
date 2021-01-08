@@ -90,7 +90,134 @@ On a de la job. Listons les extensions pour chaque étape.
    
 L’étape 3, est-ce qu’elle peut planter? Comme les autres étapes, elle peut planter si l’app plante elle-même. Genre, un bug, un throw non couvert. On va lâcher un erreur 500 si ça arrive, mais ça veut dire que le problème est de notre bord.
 
-[Voici le use-case que ça donne, disponible sur le wiki du projet.](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-User-creation)
+Voici le use-case que ça donne : 
+
+<table>
+  <tr>
+    <th colspan=3>User creation</th>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td colspan=2>A non-user creates a user to access the users' functionalities of the application</td>
+  </tr>
+  <tr>
+    <td>Actors</td>
+    <td colspan=2>Elevator users</td>
+  </tr>
+  <tr>
+    <td>Pre-condition</td>
+    <td colspan=2>The user's email must not already be in use</td>
+  </tr>
+  <tr>
+    <td>Post-condition</td>
+    <td colspan=2>After a successful user creation, an email is sent to the user containing their account id.</td>
+  </tr>
+  <tr>
+    <th>Main Scenarios</th>
+    <th>Serial No</th>
+    <th>Steps</th>
+  </tr>
+  <tr>
+    <td>Actors/Users</td>
+    <td>1</td>
+    <td>
+      Enter email, full name, weight and height : 
+<pre lang=json>
+{
+  "email": string,
+  "fullName": string,
+  "weight": number,
+  "height": number
+}
+</pre>
+      Example : 
+<pre lang=json>
+{
+  "email": "jean.paul@email.com",
+  "fullName": "Jean Paul",
+  "weight": 77.1,
+  "height": 183
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2</td>
+    <td>Validate email does not already exist</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>3</td>
+    <td>Respond newly created account id as a location header.</td>
+  </tr>
+  <tr>
+    <td>Extensions</td>
+    <td>1a</td>
+    <td>
+      Missing or invalid email format. The following is returned : 
+<pre lang=json>
+{
+  "error": "INVALID_EMAIL_FORMAT",
+  "description": "Email must be of a valid format, such as email@domain.com"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>1b</td>
+    <td>
+      Missing, empty or bad type for full name. The following is returned : 
+<pre lang=json>
+{
+  "error": "INVALID_FULL_NAME",
+  "description": "Full name must be a non-empty string"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>1c</td>
+    <td>
+      Missing or non-positive weight. The following is returned : 
+<pre lang=json>
+{
+  "error": "NON_POSITIVE_WEIGHT",
+  "description": "Weight (in kilograms) must be a positive number"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>1d</td>
+    <td>
+      Missing or non-positive height. The following is returned : 
+<pre lang=json>
+{
+  "error": "NON_POSITIVE_HEIGHT",
+  "description": "Height (in centimeters) must be a positive number"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2e</td>
+    <td>
+      Already existing email. The following is returned : 
+<pre lang=json>
+{
+  "error": "ALREADY_EXISTING_EMAIL",
+  "description": "Email {{email}} already exists in the system : please choose another one or use the associated account ID"
+}
+</pre>
+    </td>
+  </tr>
+</table>
+*(cas d'utilisation de création d'utilisateur sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-User-creation))*
 
 ___
 Use-case : Achat de passe d’accès à usage unique
