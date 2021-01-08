@@ -27,7 +27,7 @@ Ok. Les use-cases.
 
 ## Qu'est-ce qu'un cas d'utilisation?
 
-C’est quoi ça? Un cas d’utilisation [c’est comment, au plan technique, fonctionnel, les utilisateur s interagissent avec votre application et dans quel but](https://en.wikipedia.org/wiki/Use_case). Dans les récits, j’avais utilisé des personas. Ici, on va traduire ça en acteurs / actrices de l’app.
+C’est quoi ça? Un cas d’utilisation [c’est comment, au plan technique, fonctionnel, les utilisateurs interagissent avec votre application et dans quel but](https://en.wikipedia.org/wiki/Use_case). Dans les récits, j’avais utilisé des personas. Ici, on va traduire ça en acteurs / actrices de l’app.
 
 ![Exemple de cas d'utilisation, sous forme de diagramme](/public/img/posts/example-use-case-diagram.png)
 *(exemple de cas d'utilisation, sous forme de diagramme, tiré de [Wikimedia](https://commons.wikimedia.org/wiki/File:Use_case_restaurant_model.svg))*
@@ -333,74 +333,202 @@ Alright, c’est juste ça!
 
 ## Cas d'utilisation : Achat de passe d’accès pour des dates
 
-___
+```markdown
+#### Story 2 : Periodic access pass creation for a single date
 
-Prochain use-case : l’achat de passe d’accès pour des dates. Dans ma vidéo précédente, j’ai dis que, rendu à un point plus technique, l’achat de passe pour une ou plusieurs dates reviendrait au même? C’est ici qu’on le voit. On va faire un seul cas d'utilisation, parce que, dans tous les cas, on va vouloir recevoir une liste de dates. Après, si tu veux une seule date, ben, t’en envoie juste une.
-Ok, c’est pas mal un copié-collé du dernier use-case, sauf qu’on envoie une liste de dates et que le type de période est setté aux dates.
-Y’a un truc qui ajoute du olé-olé par contre. Ça serait cool d’empêcher les utilisateurs d’acheter une passe si la période couverte pas la passe est déjà couverte pas une autre.
-J’empêcherai pas d’acheter une passe de mois si t’as déjà la passe pour une date dans le mois. Le contraire, par contre, ferait pas mal de sens. Ça empêcherait les erreurs utilisateurs un peu et, comme on veut que chaque passe appartienne à une seule personne, ça fait du sens. On va donc ajouter cette étape là.
+Bob wants to buy a periodic access pass for a single date. This pass allows Bob to enter and leave the space station using the elevator anytime they want within the given date. They enter the following information : 
+
+ - Date for access pass
+
+Bob then expects to receive an access pass code, which will be used to access the elevator. This action creates a bill to Bob. Bob wants to receive an email confirming their bill creation.
+
+#### Story 3 : Periodic access pass creation for many dates
+
+Bob wants to buy a periodic access pass for a many dates. This pass allows Bob to enter and leave the space station using the elevator anytime they want within the given dates. They enter the following information : 
+
+ - Dates for access pass
+
+Bob then expects to receive an access pass code, which will be used to access the elevator. This action creates a bill to Bob. Bob wants to receive an email confirming their bill creation.
+```
+*(récits d'achat de passe d'accès pour des dates sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
+
+Prochain use-case : l’achat de passe d’accès pour des dates. Vous l'aurez sûrement deviné, rendu à un point plus technique, l’achat de passe pour une ou plusieurs dates reviendrait au même. On va faire un seul cas d'utilisation, parce que, dans tous les cas, on va vouloir recevoir une liste de dates. Après, si tu veux une seule date, ben, t’en envoie juste une.
+
+Ok, c’est pas mal un copié-collé du dernier use-case, sauf qu’on envoie une liste de dates et que le type de période est settée aux dates.
+
+Y’a un truc qui ajoute du olé-olé par contre. Ça serait cool d’empêcher les utilisateurs d’acheter une passe si la période couverte pas la passe est déjà couverte pas une autre. J’empêcherai pas d’acheter une passe de mois si t’as déjà la passe pour une date dans le mois. Le contraire, par contre, ferait pas mal de sens. Ça empêcherait les erreurs utilisateurs un peu et, comme on veut que chaque passe appartienne à une seule personne, ça fait du sens. On va donc ajouter cette étape là.
+
 Comment ça peut planter? Comme au précédent use-case, l’account ID et le type de période peuvent être invalider la requête. Et pour les dates?
+
 Ok, on va s’établir des règles de domaine. Est-ce qu’on veut des passes pour des dates avec une liste de dates vide? Non. On veut que chaque date soit du bon format? Ben, pas le choix. Est-ce qu’on veut une passe avec deux fois la même date? Nope. Une date dans le passé? Non. Good!
+
 La dernière exception, c’est ce que j’ai mentionné tantôt, qu’on veut pas acheter une passe d’une durée de temps courte dans une période déjà couverte pas une autre passe.
+
+<table>
+  <tr>
+    <th colspan=3>Dates access pass creation</th>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td colspan=2>A user creates an access pass for given dates to use the elevator</td>
+  </tr>
+  <tr>
+    <td>Actors</td>
+    <td colspan=2>Elevator users</td>
+  </tr>
+  <tr>
+    <td>Pre-condition</td>
+    <td colspan=2>The account must be created</td>
+  </tr>
+  <tr>
+    <td>Post-condition</td>
+    <td colspan=2>After a successful access pass creation, an email is sent to the user containing their access pass code. Also, an associated bill is added to the account.</td>
+  </tr>
+  <tr>
+    <th>Main Scenarios</th>
+    <th>Serial No</th>
+    <th>Steps</th>
+  </tr>
+  <tr>
+    <td>Actors/Users</td>
+    <td>1</td>
+    <td>Enter account ID</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2</td>
+    <td>
+      Enter period type and dates : 
+<pre lang=json>
+{
+  "periodType": string,
+  "dates": array of strings
+}
+</pre>
+      Example : 
+<pre lang=json>
+{
+  "periodType": "dates",
+  "dates": [
+    "2021-12-01",
+    "2021-12-02",
+  ]
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>3</td>
+    <td>Validate the user do not already have an access pass for given dates (with dates, week or month access passes)</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>4</td>
+    <td>Respond newly created access pass code as a location header.</td>
+  </tr>
+  <tr>
+    <td>Extensions</td>
+    <td>1a</td>
+    <td>
+      Non existent account ID. The following is returned : 
+<pre lang=json>
+{
+  "error": "ACCOUNT_NOT_FOUND",
+  "description": "Account with ID {{accountId}} not found"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2b</td>
+    <td>
+      Bad value for period type. The following is returned : 
+<pre lang=json>
+{
+  "error": "INVALID_PERIOD_TYPE",
+  "description": "Period type must be one of {{availablePeriodTypes}}"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2c</td>
+    <td>
+      Empty array for dates. The following is returned : 
+<pre lang=json>
+{
+  "error": "EMPTY_DATES",
+  "description": "Dates array must not be empty"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2d</td>
+    <td>
+       Invalid date format. The following is returned : 
+<pre lang=json>
+{
+  "error": "INVALID_DATE_FORMAT",
+  "description": "Date must be of format yyyy-MM-dd, such as 2021-12-01"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2e</td>
+    <td>
+       Repeated dates in array. The following is returned : 
+<pre lang=json>
+{
+  "error": "REPEATED_DATES",
+  "description": "Dates in array must not be unique"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2f</td>
+    <td>
+       One of the dates is in the past. The following is returned : 
+<pre lang=json>
+{
+  "error": "DATE_IN_THE_PAST",
+  "description": "Dates in array must not be in the past."
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>3g</td>
+    <td>
+       An access pass associated to the account already covers one of the given dates. The following is returned : 
+<pre lang=json>
+{
+  "error": "PERIOD_ALREADY_COVERED",
+  "description": "Access pass {{accessPassCode}} already covers the given period"
+}
+</pre>
+    </td>
+  </tr>
+</table>
+*(cas d'utilisation d'achat de passe d'accès pour des dates [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-Access-pass-creation))*
+
 Hey, avant de voir le reste des cas d’utilisation, j’veux juste rappeler une affaire : les status HTTP. Je pourrais les mettre dans la doc, mais j’pense que, pour les cas d’utilisation, on peut considérer qu’ils sont implicites. J’vais les mettre dans la doc des calls d’API, mais on peut s’entendre que not found c’est 404 pis invalid ou bad format c’est 400.
-Cas d’utilisation de passes d’accès
-Ok, pis le reste des passes d’accès?
-On a les passes pour une semaine et un mois. Pour elle, je vais demander l’année en même temps. Il va falloir pas mal les mêmes choses que pour les passes d’accès de dates.
-On a la dernière, pour lister les passes d’accès. Remarquez que celle-là a pas de post-condition, parce que y’a pas de changement d’états dans les données ou d’autre action attendue. On veut juste afficher des informations. La seule façon de faire planter ça, c’est envoyer un mauvais ID de compte.
-Cas d’accès à l’ascenseur
-Pour l’accès à l’ascenseur, c’est ben simple, on veut seulement monter et descendre.
-On veut que l’utilisateur et la passe existe. Faire ça implique ensuite que l’ascenseur est en haut. Pas trop sur de ce que ça implique avec les petites fonctionnalités qu’on a live, mais peu importe.
-Donc, les étapes, c’est
-Entrer l’ID de compte
-Entrer le code de passe d’accès
-Entrer la date, parce que je veux pas assumer que le système où l’application roule est toujours la date qu’on veut et pour simplifier les tests.
-On valide que l’utilisateur est pas déjà monter dans la station
-On valide la passe d’accès pour la date donnée
-On répond que c’est good!
-Les exceptions à lancer sont à peu près ce que vous vous attendez pour chaque étape listée. Le cas d’utilisation pour descendre est le même, mais, à l’envers.
-Cas d’utilisation de factures
-Pour les factures on voulait quoi? Pas mal juster les payer et les lister.
-Pour payer, le compte et la facture doivent exister. On s’entend à ce qu’après, le montant qu’on paie soit enlever de la facture.
-Les étapes?
-Entrer l’ID de compte
-Entrer le numéro de facture
-Entrer le montant à payer. On va assumer que ça vient d’une autre app à nous sécure et que l’argent va vraiment être payée.
-On répond la facture à jour. On pourrait juste faire un HTTP status, mais c’est un peu poche de pas au moins montrer le nouveau montant du. On va répondre le bill au complet pour être fin.
-Les erreurs?
-Le compte existe pas
-Le bill existe pas
-Le montant à payer est pas un chiffre positif
-Le montant payé surpasse ce qui est du
-Pis pour lister? Ça ressemble à la liste de passe d’accès. Y’a pas grande vérification à faire à part l’ID de compte et on répond la liste de factures.
-Cas d’utilisation de reporting
-Aight, la bête noire. Le reporting va être rough, genre pas mal plus qu’on pense. J’vais vous montrer les cas d’utilisation mais y’a 1000 concepts là-dedans qu’on a pas à retenir tout de suite. Ça va être pas mal plus tard dans le projet.
-On a cinq cas d’utilisation, qui correspondent aux cinq récits, qui correspondent aux cinq métriques. On va faire une twiste, on va quand même laisser les gens prendre plusieurs métriques en même temps, parce que ça nous complique pas tant la job et ça met tout ça dans le même christie de call HTTP. On va uniformiser le reporting.
-Avant qu’on passe dans les cas d’utilisation, juste savoir que j’ai changé les récits de reporting parce que les combinaisons métriques/dimensions que j’avais mis marchaient pas.
-En gros, on veut :
-Que la personne s’authentifie
-Demande la ou les métriques qu’a veut
-A demande les dimensions qu’a veut, qui fittent avec les métriques demandées, et c’est pas obligatoire
-A demande l’année de la période voulue
-A demande le mois, si elle veut affinée sa période, donc c’est pas obligatoire
-Le scope, donc comment on fragmente temporellement la période qu’on veut
-Si on veut, on demande les fonctions d'agrégats, donc le regroupement de données pour avoir le minimum et tralala
-Ensuite, on répond le data dans ce format-là. Comme vous pouvez voir, ça ressemble pas mal au diagramme que j’ai montré l’autre fois.
-Les raisons de plantés sont :
-Authentification qui marche pas
-Aucune métrique sélectionnée
-Métrique qui n’existe pas
-Dimension qui n’existe pas
-Dimension qui n’existe pas pour une des métriques données
-Année absente
-Année invalide
-Mois invalide
-Portée / scope absent
-Scope invalide
-Fonction d'agrégat invalide
-Ok. Pis c’est la même affaire pour chaque métrique, soit la création d’utilisateurs, la création de passe, la création de bill, le paiement de bill et l’utilisation de l’ascenseur.
-Fiou.
-En passant, pour les métriques, les dimensions, le scope et la période, c’est des query parameters. C’est pas du JSON à envoyer en body, c’est un GET à faire en spécifier des paramètres dans le URI.
-Conclusion
-OK.
-J’espère que vous avez aimé ça. C’était juste de la doc, mais c’était plus le fun à faire que je pensais. Le prochain vidéo va être quand même cool. On va faire des dessins. Astheure qu’on a les cas d’utilisations techniques de l’app, c’est le temps de décortiquer notre domaine. On va trouver les têtes d'agrégats et on va lister nos objets principaux.
-Alright, à la prochaine, SALUT LÀ.
+
+## Le reste des cas d'utilisation
+
+Puisque cet article commence à être pas mal long, plutôt que d'aller en détails dans les derniers use-cases, je vous propose plutôt de lire les récits et les cas d'utilisation que j'ai écris sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki). Ma vidéo présente le tout plus exhaustivement, alors si vous voulez vous pouvez toujours écouter ça!
+
+Ok.
+
+J’espère que vous avez aimé ça. C’était juste de la doc., mais c’était plus le fun à faire que je pensais. Dans le prochain article, on va faire des dessins. Maintenant qu’on a les cas d’utilisation techniques de l’app, c’est le temps de décortiquer notre domaine. On va trouver les têtes d'agrégats et on va lister nos objets principaux.
+
+Alright, à la prochaine, salut là!
