@@ -2,7 +2,7 @@
 layout: post
 title:  "From functionalities to stories"
 date:   2020-12-31
-categories: project
+categories: [project, documentation]
 lang: en
 lang-ref: functionalities-to-stories
 ---
@@ -96,7 +96,7 @@ Bob wants to create a user. They enter the following information :
 
 - Email address
 - Full name
-- Height in centimers
+- Height in centimeters
 - Weight in grams
 ```
 *(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*

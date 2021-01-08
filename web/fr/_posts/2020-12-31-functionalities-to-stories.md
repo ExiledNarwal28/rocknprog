@@ -2,7 +2,7 @@
 layout: post
 title:  "De fonctionnalités à récits (stories)"
 date:   2020-12-31
-categories: project
+categories: [project, documentation]
 lang: fr
 lang-ref: functionalities-to-stories
 ---
@@ -11,7 +11,7 @@ lang-ref: functionalities-to-stories
 
 Salut!
 
-Aujourd’hui, je vous présente la première partie d’un guide pour aller d’une liste de fonctionnalités à des récits à des cas d’utilisations. J’ai décidé de le couper en deux pour présenter plus en détail les concepts. Si vous voulez voir comment écrire des cas d’utilisations à partir de récits, sautez au prochain article, “De récits à cas d’utilisations” (je mettrai le lien quand l'article sera publié).
+Aujourd’hui, je vous présente la première partie d’un guide pour aller d’une liste de fonctionnalités à des récits à des cas d’utilisations. J’ai décidé de le couper en deux pour présenter plus en détail les concepts. Si vous voulez voir comment écrire des cas d’utilisations à partir de récits, sautez au prochain article, [“De récits à cas d’utilisation (use-cases)"]({% post_url 2021-01-08-stories-to-use-cases %}).
 
 Bon.
 
@@ -96,7 +96,7 @@ Bob wants to create a user. They enter the following information :
 
  - Email address
  - Full name
- - Height in centimers
+ - Height in centimeters
  - Weight in grams
 ```
 *(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
