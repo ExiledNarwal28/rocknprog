@@ -352,7 +352,7 @@ Bob then expects to receive an access pass code, which will be used to access th
 ```
 *(récits d'achat de passe d'accès pour des dates sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
 
-Prochain use-case : l’achat de passe d’accès pour des dates. Vous l'aurez sûrement deviné, rendu à un point plus technique, l’achat de passe pour une ou plusieurs dates reviendrait au même. On va faire un seul cas d'utilisation, parce que, dans tous les cas, on va vouloir recevoir une liste de dates. Après, si tu veux une seule date, ben, t’en envoie juste une.
+Prochain use-case : l’achat de passe d’accès pour des dates. Vous l'aurez sûrement deviné, rendu à un point plus technique, l’achat de passe pour une ou plusieurs dates reviendrait au même. On va faire un seul cas d'utilisation parce que, dans tous les cas, on va vouloir recevoir une liste de dates. Après, si tu veux une seule date, ben, t’en envoie juste une.
 
 Ok, c’est pas mal un copié-collé du dernier use-case, sauf qu’on envoie une liste de dates et que le type de période est settée aux dates.
 
@@ -529,6 +529,6 @@ Puisque cet article commence à être pas mal long, plutôt que d'aller en déta
 
 Ok.
 
-J’espère que vous avez aimé ça. C’était juste de la doc., mais c’était plus le fun à faire que je pensais. Dans le prochain article, on va faire des dessins. Maintenant qu’on a les cas d’utilisation techniques de l’app, c’est le temps de décortiquer notre domaine. On va trouver les têtes d'agrégats et on va lister nos objets principaux.
+J’espère que vous avez aimé ça. C’était juste de la doc, mais c’était plus le fun à faire que je pensais. Dans le prochain article, on va faire des dessins. Maintenant qu’on a les cas d’utilisation techniques de l’app, c’est le temps de décortiquer notre domaine. On va trouver les têtes d'agrégats et on va lister nos objets principaux.
 
 Alright, à la prochaine, salut là!

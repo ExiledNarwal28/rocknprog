@@ -63,7 +63,7 @@ By the way, some things have changed in to stories because they didn't make sens
 
  - Description : “A non-user creates a user to access the users' functionalities of the application"
  - Actors : We had Bob and Alice, but, here, we want those as roles. Here, it's "Elevator users".
- - Pré-condition : The user's email must not already be in use
+ - Pre-condition : The user's email must not already be in use
  - Post-condition : We want to send en email
 
 Good. What are the actions?
@@ -219,9 +219,7 @@ Here's the use-case :
 </table>
 *(use-case of user creation on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-User-creation))*
 
-___
-
-## Cas d'utilisation : Achat de passe d’accès à usage unique
+## Use-case : One-time use access pass creation
 
 ```markdown
 Bob wants to buy a one-time use access pass. This pass allows Bob to enter and leave the space station using the elevator. To create this pass they need to :
@@ -230,26 +228,26 @@ Bob wants to buy a one-time use access pass. This pass allows Bob to enter and l
 
 Bob then expects to receive an access pass code, which will be used to access the elevator. This action creates a bill to Bob. Bob wants to receive an email confirming their bill creation.
 ```
-*(récit d'achat de passe d'accès à usage unique sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
+*(story of one-time use access pass creation on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
 
-Good, selon le récit 2.1, en tant qu’utilisateur, je peux acheter une passe d’accès à usage unique juste en précisant que ça en est une. Pas trop pire.
+Good, according to story 2.1, as a user, I can buy an access pass for a single usage only by specifying it's a single-use pass. Not so rough.
 
- - Les acteurs? Les mêmes que l’autre use-case, les utilisateurs de l’ascenseur.
- - Pré-condition? L’utilisateur doit exister.
- - Post-condition? On envoie un courriel (oui j’ai changé ça dans les récits) et on facture le compte. Parf.
-   
-Les étapes?
+ - Actors? The same as the other use-case, so the elevator's users
+ - Pre-condition? The user must exist.
+ - Post-condition? We send an email (yes, this also was changed in the stories) and the account is billed. Good.
 
- 1. On entre l’ID de compte. Ça va simplement être dans le path URI pour tout de suite, mais whatever. 
- 2. On doit spécifier que c’est un one-time use. Pour ça, j’vais avoir une énumération de valeurs possibles pour de quoi qu’on appeler “periodType”. Comme ça, en créant ta passe d’accès, tu sélectionne son type et tu envoie les données que t’as besoin. Ici, on a juste à dire que le “periodType” c’est “oneTimeUse”. 
- 3. On répond le code d’accès, en location d’header HTTP, comme à l’autre use-case.
-    
-Good! Et maintenant, comment ça peut planter?
+Steps?
 
- - 1a. Si l’ID de compte n’existe pas, c’est un 404 not found. Qu’il soit fautif, null, ou de mauvais format, dans tous les cas, si on l’a pas, ça plante.
- - 2b. On envoie seulement le type de période. Comme on veut que ça soit une valeur dans une énumération, on veut planter si le type envoyé n’existe pas.
-   
-Alright, c’est juste ça!
+ 1. We enter the account ID. That's gonna be a simple path URI parameter.
+ 2. We specify it's a one-time user pass. For this, I'll use an enumeration of possible values for something we'll call "periodType". This way, when creating your access pass, your select the desired type and you send the additional required data. Here, only the period type is necessary.
+ 3. We respond the access pass code as an HTTP location header, like in the last use-case.
+
+Good. And now, how can it crash?
+
+ - 1a. If the account ID does not exist, that's a 404 not found. If it's faulty, null or of a bad format, it doesn't matter.
+ - 2b. We only send the period type. So, we want it to be a valid value of the enumeration.
+
+Alright, that's all of it!
 
 <table>
   <tr>
@@ -331,9 +329,9 @@ Alright, c’est juste ça!
     </td>
   </tr>
 </table>
-*(cas d'utilisation d'achat de passe d'accès à usage unique [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-Access-pass-creation))*
+*(use-case of one-time use access pass creation on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-User-creation))*
 
-## Cas d'utilisation : Achat de passe d’accès pour des dates
+## Use-case : Access pass for dates creation
 
 ```markdown
 #### Story 2 : Periodic access pass creation for a single date
@@ -352,19 +350,19 @@ Bob wants to buy a periodic access pass for a many dates. This pass allows Bob t
 
 Bob then expects to receive an access pass code, which will be used to access the elevator. This action creates a bill to Bob. Bob wants to receive an email confirming their bill creation.
 ```
-*(récits d'achat de passe d'accès pour des dates sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
+*(stories of access pass for dates creation on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
 
-Prochain use-case : l’achat de passe d’accès pour des dates. Vous l'aurez sûrement deviné, rendu à un point plus technique, l’achat de passe pour une ou plusieurs dates reviendrait au même. On va faire un seul cas d'utilisation, parce que, dans tous les cas, on va vouloir recevoir une liste de dates. Après, si tu veux une seule date, ben, t’en envoie juste une.
+Next use-case : buying access pass for dates. You might have guessed that, when reaching a certain technical level, buying an access pass for one or many dates is pretty much the same. We'll write a single use-case since, in all cases, we want a list of dates. If you want a single date, well, you can still only send one.
 
-Ok, c’est pas mal un copié-collé du dernier use-case, sauf qu’on envoie une liste de dates et que le type de période est settée aux dates.
+Ok, this one is pretty much a copy of the last use-case. Though, here, we receive a list of dates and the period type is for dates.
 
-Y’a un truc qui ajoute du olé-olé par contre. Ça serait cool d’empêcher les utilisateurs d’acheter une passe si la période couverte pas la passe est déjà couverte pas une autre. J’empêcherai pas d’acheter une passe de mois si t’as déjà la passe pour une date dans le mois. Le contraire, par contre, ferait pas mal de sens. Ça empêcherait les erreurs utilisateurs un peu et, comme on veut que chaque passe appartienne à une seule personne, ça fait du sens. On va donc ajouter cette étape là.
+One thing is pretty yeehaw, though. It would be cool to restrict users from buying an access pass for a period already covered by another one of their access passes. I won't stop them from buying an access pass for a month they already have one date covered in. The opposite will be restricted, which makes a lot more sense. That will stop users from making mistakes and, since we want all passes to belong to a single user, it's okay. We'll add that step.
 
-Comment ça peut planter? Comme au précédent use-case, l’account ID et le type de période peuvent être invalider la requête. Et pour les dates?
+How can it go wrong? Like in the previous use-case, the account ID and period type can invalidate the request. What about the dates?
 
-Ok, on va s’établir des règles de domaine. Est-ce qu’on veut des passes pour des dates avec une liste de dates vide? Non. On veut que chaque date soit du bon format? Ben, pas le choix. Est-ce qu’on veut une passe avec deux fois la même date? Nope. Une date dans le passé? Non. Good!
+We'll establish some domain rules. Do we want some passes with no dates? Nope. Do we want all dates to be of correct format? Sure, otherwise they can't be processed. Do we want the same date twice in a pass? No. Do we want dates in the past? Nope. Alright!
 
-La dernière exception, c’est ce que j’ai mentionné tantôt, qu’on veut pas acheter une passe d’une durée de temps courte dans une période déjà couverte pas une autre passe.
+I'll add one more exception for what I previously mentioned. If a pass covers the period asked for, that's a big no-no.
 
 <table>
   <tr>
@@ -521,16 +519,16 @@ La dernière exception, c’est ce que j’ai mentionné tantôt, qu’on veut p
     </td>
   </tr>
 </table>
-*(cas d'utilisation d'achat de passe d'accès pour des dates [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-Access-pass-creation))*
+*(use-case of access pass for dates creation on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-User-creation))*
 
-Hey, avant de voir le reste des cas d’utilisation, j’veux juste rappeler une affaire : les status HTTP. Je pourrais les mettre dans la doc, mais j’pense que, pour les cas d’utilisation, on peut considérer qu’ils sont implicites. J’vais les mettre dans la doc des calls d’API, mais on peut s’entendre que not found c’est 404 pis invalid ou bad format c’est 400.
+Hey, before checking out the other use-cases, I want to make a quick stop : HTTP status codes. I could add them in this doc, but, for the use-cases, we could consider them implicit. I'll add them in the API documentation, sure, but, for now, we can assume a not found is a 404 and an invalid or bad format attribute is a 400.
 
-## Le reste des cas d'utilisation
+## Other use-cases
 
-Puisque cet article commence à être pas mal long, plutôt que d'aller en détails dans les derniers use-cases, je vous propose plutôt de lire les récits et les cas d'utilisation que j'ai écris sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki). Ma vidéo présente le tout plus exhaustivement, alors si vous voulez vous pouvez toujours écouter ça!
+Since this post is getting pretty long, rather than going into details for each of the remaining use-case, I'll let you read through them on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki). My video presents them completely, but it's in French. You can still watch it if it helps!
 
 Ok.
 
-J’espère que vous avez aimé ça. C’était juste de la doc., mais c’était plus le fun à faire que je pensais. Dans le prochain article, on va faire des dessins. Maintenant qu’on a les cas d’utilisation techniques de l’app, c’est le temps de décortiquer notre domaine. On va trouver les têtes d'agrégats et on va lister nos objets principaux.
+I hope you liked this. It's only doc, but it was nicer to do that I though. In the next post, we're drawing stuff. Now that we have our technical use-cases figured out, it's time to conceptualize our domain. We'll find the aggregation heads and list our main objects.
 
-Alright, à la prochaine, salut là!
+Alright, until next time, see ya!
