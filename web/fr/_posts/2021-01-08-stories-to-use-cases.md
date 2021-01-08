@@ -219,21 +219,122 @@ Voici le use-case que ça donne :
 </table>
 *(cas d'utilisation de création d'utilisateur sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-User-creation))*
 
-___
-Use-case : Achat de passe d’accès à usage unique
+## Cas d'utilisation : Achat de passe d’accès à usage unique
+
+```markdown
+Bob wants to buy a one-time use access pass. This pass allows Bob to enter and leave the space station using the elevator. To create this pass they need to :
+
+- Specify this is a one-time use access pass
+
+Bob then expects to receive an access pass code, which will be used to access the elevator. This action creates a bill to Bob. Bob wants to receive an email confirming their bill creation.
+```
+*(récit d'achat de passe d'accès à usage unique sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories))*
+
 Good, selon le récit 2.1, en tant qu’utilisateur, je peux acheter une passe d’accès à usage unique juste en précisant que ça en est une. Pas trop pire.
-Les acteurs? Les mêmes que l’autre use-case, les utilisateurs de l’ascenseur.
-Pré-condition? L’utilisateur doit exister.
-Post-condition? On envoie un courriel (oui j’ai changé ça dans les récits) et on facture le compte. Parf.
+
+ - Les acteurs? Les mêmes que l’autre use-case, les utilisateurs de l’ascenseur.
+ - Pré-condition? L’utilisateur doit exister.
+ - Post-condition? On envoie un courriel (oui j’ai changé ça dans les récits) et on facture le compte. Parf.
+   
 Les étapes?
-On entre l’ID de compte. Ça va simplement être dans le path URI pour tout de suite, mais whatever.
-On doit spécifier que c’est un one-time use. Pour ça, j’vais avoir une énumération de valeurs possibles pour de quoi qu’on appeler “periodType”. Comme ça, en créant ta passe d’accès, tu sélectionne son type et tu envoie les données que t’as besoin. Ici, on a juste à dire que le “periodType” c’est “oneTimeUse”.
-On répond le code d’accès, en location d’header HTTP, comme à l’autre use-case.
+
+ 1. On entre l’ID de compte. Ça va simplement être dans le path URI pour tout de suite, mais whatever. 
+ 2. On doit spécifier que c’est un one-time use. Pour ça, j’vais avoir une énumération de valeurs possibles pour de quoi qu’on appeler “periodType”. Comme ça, en créant ta passe d’accès, tu sélectionne son type et tu envoie les données que t’as besoin. Ici, on a juste à dire que le “periodType” c’est “oneTimeUse”. 
+ 3. On répond le code d’accès, en location d’header HTTP, comme à l’autre use-case.
+    
 Good! Et maintenant, comment ça peut planter?
-À l’étape 1, si l’ID de compte n’existe pas, c’est un 404 not found. Qu’il soit fautif, null, ou de mauvais format, dans tous les cas, si on l’a pas, ça plante.
-À l’étape 2, on envoie seulement le type de période. Comme on veut que ça soit une valeur dans une énumération, on veut planter si le type envoyé n’existe pas.
+
+ - 1a. Si l’ID de compte n’existe pas, c’est un 404 not found. Qu’il soit fautif, null, ou de mauvais format, dans tous les cas, si on l’a pas, ça plante.
+ - 2b. On envoie seulement le type de période. Comme on veut que ça soit une valeur dans une énumération, on veut planter si le type envoyé n’existe pas.
+   
 Alright, c’est juste ça!
-Use-case : Achat de passe d’accès pour des dates
+
+<table>
+  <tr>
+    <th colspan=3>One-time use access pass creation</th>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td colspan=2>A user creates a one-time use access pass to use the elevator</td>
+  </tr>
+  <tr>
+    <td>Actors</td>
+    <td colspan=2>Elevator users</td>
+  </tr>
+  <tr>
+    <td>Pre-condition</td>
+    <td colspan=2>The account must be created</td>
+  </tr>
+  <tr>
+    <td>Post-condition</td>
+    <td colspan=2>After a successful access pass creation, an email is sent to the user containing their access pass code. Also, an associated bill is added to the account.</td>
+  </tr>
+  <tr>
+    <th>Main Scenarios</th>
+    <th>Serial No</th>
+    <th>Steps</th>
+  </tr>
+  <tr>
+    <td>Actors/Users</td>
+    <td>1</td>
+    <td>Enter account ID</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2</td>
+    <td>
+      Enter period type : 
+<pre lang=json>
+{
+  "periodType": string
+}
+</pre>
+      Example : 
+<pre lang=json>
+{
+  "periodType": "oneTimeUse"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>3</td>
+    <td>Respond newly created access pass code as a location header.</td>
+  </tr>
+  <tr>
+    <td>Extensions</td>
+    <td>1a</td>
+    <td>
+      Non existent account ID. The following is returned : 
+<pre lang=json>
+{
+  "error": "ACCOUNT_NOT_FOUND",
+  "description": "Account with ID {{accountId}} not found"
+}
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>2b</td>
+    <td>
+      Bad value for period type. The following is returned : 
+<pre lang=json>
+{
+  "error": "INVALID_PERIOD_TYPE",
+  "description": "Period type must be one of {{availablePeriodTypes}}"
+}
+</pre>
+    </td>
+  </tr>
+</table>
+*(cas d'utilisation d'achat de passe d'accès à usage unique [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-%3A-Access-pass-creation))*
+
+## Cas d'utilisation : Achat de passe d’accès pour des dates
+
+___
+
 Prochain use-case : l’achat de passe d’accès pour des dates. Dans ma vidéo précédente, j’ai dis que, rendu à un point plus technique, l’achat de passe pour une ou plusieurs dates reviendrait au même? C’est ici qu’on le voit. On va faire un seul cas d'utilisation, parce que, dans tous les cas, on va vouloir recevoir une liste de dates. Après, si tu veux une seule date, ben, t’en envoie juste une.
 Ok, c’est pas mal un copié-collé du dernier use-case, sauf qu’on envoie une liste de dates et que le type de période est setté aux dates.
 Y’a un truc qui ajoute du olé-olé par contre. Ça serait cool d’empêcher les utilisateurs d’acheter une passe si la période couverte pas la passe est déjà couverte pas une autre.
