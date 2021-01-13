@@ -1,49 +1,51 @@
 ---
 layout: post
-title:  "Têtes d'agrégats et conceptualisation de domaine"
+title:  "Aggregate heads and domain conceptualization"
 date:   2021-01-13
 categories: [project]
-lang: fr
+lang: en
 lang-ref: aggregate-heads-and-domain-conceptualization
 ---
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/33cKvBi4MAE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Salut!
+Sup!
 
-Hey, c’est l’heure de faire des dessins. Dans les derniers articles, on a établi la liste de fonctionnalités de l’app qu’on a transformée [en récits]({% post_url 2020-12-31-functionalities-to-stories %}), puis en [cas d’utilisation]({% post_url 2021-01-08-stories-to-use-cases %}). Maintenant, on a une bonne idée des différents concepts qui vont être dans l’app. On va faire des beaux diagrammes.
+Hey, the time has come to do some drawings. In the last posts, we established a list of functionalities that we transformed into [stories]({% post_url 2020-12-31-functionalities-to-stories %}) and then into [use-cases]({% post_url 2021-01-08-stories-to-use-cases %}). Now, we have a good idea of the different concepts used within our app. Let's make some diagrams.
 
-Je ne veux pas m'embarquer dans des diagrammes plus formels, comme des [diagrammes UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) ou de la [documentation C4](https://c4model.com/). Ces deux-là peuvent être très utiles, particulièrement la documentation C4, qui permet de décortiquer les composantes d'une application en début de projet. Je veux plutôt avoir un diagramme simple des classes principales de mon domaine. Le but est simplement d'illustrer les liens entre les concepts importants qu'on va avoir à implémenter.
+I don't wanna get into formal diagrams, like [UMLs](https://en.wikipedia.org/wiki/Unified_Modeling_Language) or [C4 documentation](https://c4model.com/). These two can be pretty useful, especially C4 documentation, which helps deciding an app's components at the beginning of a project. Instead, I want to produce a diagram that represents the main classes of my domain. My goal is simply to illustrate the links between some important concepts that we'll have to implement.
 
-## Pis c'est quoi ça, un domaine?
+## And what is that, a domain?
 
-Le [domaine](https://en.wikipedia.org/wiki/Application_domain) c’est le cœur de votre application. C’est là que vous mettez la logique, les règles et les liens entre vos différents concepts. Le but c’est d’isoler entièrement le centre de votre app de tout ce qui concerne les technologies utilisées. En plus de ça, vous voulez séparer votre domaine en packages, en modules, qui dépendent les uns des autres le plus simplement possible. Idéalement, la dépendance ne sera jamais circulaire.
+A [domain](https://en.wikipedia.org/wiki/Application_domain) is the heart of your application. This is where you put your logic, rules and links between concepts. The goal is to completely isolate the core of your app from the technologies you use. Moreover, you want to separate your domain in package, in modules, that depends from one another in the simplest way possible. Ideally, these dependencies will never be circular.
 
-Par exemple, ça fait du sens que les passes d’accès connaissent les concepts d’argent, ou au moins juste de facture. Le contraire, par contre, non. Une facture ne doit pas connaître ce qu’est une passe d’accès. Pourquoi elle le ferait?
+For instance, it makes sense that the access passes know about money, or at least about bills. The opposite does not make sense. A bill does not have to know what an access pass is. Why would it?
 
-Du [domain-driven design (DDD)](https://en.wikipedia.org/wiki/Domain-driven_design) c'est de décrire votre domaine applicatif comme vous décrivez vos récits. C'est de coder (classes, variables, méthodes, ...) avec les mêmes termes que vous utilisez pour expliquer les concepts de votre app. Concrêtement, ça se fait avec des méthodes comme `bill.pay(amount)` ou `user.buyAccessPass(...)`.
+[Domain-driven design (DDD)](https://en.wikipedia.org/wiki/Domain-driven_design) is describing your application domain in the same way you describe your stories. It's about coding (classes, variables, methods, ...) with the same words you'll use to explain the concepts of your app. We do that with methods like `bill.pay(amount)` or `user.buyAccessPass(...)`.
 
-C’est quoi la différence avec une app classique? Ça dépend de ta définition d’une app classique. De mon bord, une app en DDD, c’est pas mal ça, une app classique. Plutôt que de faire des god-classes et des services qui contiennent beaucoup trop de logique, on va déléguer tout ça au domaine, dans des classes appropriées. Si la logique de création a pas mal d'étapes, on va faire des [factories](https://refactoring.guru/design-patterns/factory-method). Si un calcul est complexe, on va faire une classe (une [strategy](https://refactoring.guru/design-patterns/strategy), peut-être) qui détermine un résultat selon des paramètres. On va revenir aux patrons de conception à utiliser, mais pour tout de suite, retenez juste que le domaine c’est genre votre flambeau. C’est votre p’tit bébé, c’est là que vous concentrez vos efforts.
+What's the difference with a regular app, you ask? That depends on your definition of a regular app. To me, a DDD app pretty much is a regular app. Instead of making god-classes and services that contains way too much logic, we'll delegate all that to the domain, in appropriate classes. If the creation logic has many steps, we'll make [factories](https://refactoring.guru/design-patterns/factory-method). If a calculation is too complex, we'll make a class (maybe a [strategy](https://refactoring.guru/design-patterns/strategy)) that will compute a result based on parameters. We'll come back to design patterns, but, for right now, let's just keep in mind that the domain is your pride and joy. It's your baby, it's where you must concentrate all your efforts.
 
-Plus un domaine est intelligent, plus le code est simple à lire, plus il fait du cristie de sens.
+The more a domain is intelligent, the more the code is simple to read and makes some goddamn sense.
 
-Le domaine c’est le centre de [l’architecture hexagonale](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)), de l’architecture en ports & adapters. Je vais dédier un article complet à ce genre d’architecture, vu que c’est celle qu’on va utiliser. Par contre, ça va être dans un bout, car je veux y venir juste avant d’entrer dans le code.
+The application domain is the core of the [hexagonal architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software), of the ports & adapters architecture. I'll dedicate another blog post to this type of architecture, since that's the one we'll be using. That's gonna be in while, though. We're still far from our first line of code.
 
-Dernière affaire pour le domaine : on peut avoir un domaine riche ou de type CRUD ou quelque chose entre les deux. CRUD signifie Create-Read-Update-Delete. Si vous avez déjà fait de la BD, de bases de données, un peu, vous comprenez que ça veut dire que le domaine est très proche de comment les données sont sauvegardées. Dans une app comme ça, le domaine est pas mal la définition des tables de la BD et que y’a pas grande logique là-dedans. L'app devient un simple transport d'information entre un frontend et une base de données. Plus un domaine est riche, plus il contient de règles et d’obtention complexe de données. Notre domaine va être aussi riche que je peux le rendre.
+One last thing about the domain : we can have a rich domain, a CRUD-type domain or anything in between. CRUD means Create-Read-Update-Delete. If you ever played with DB, databases, you'll know that this means a domain that is really close to how the data is stored. In such an app, the domain is pretty much the definition of the database tables and do not hold much logic. An app like this is more of an information transfer from a frontend to a database than an app, really. The more a domain is rich, the more it contains rules and complex obtaining of data. Our domain will be as rich as I can make it.
 
-J’veux un beau domaine, ok?
+I just want a beautiful domain, ok?
 
-## Têtes d'agrégats
+## Aggregate heads
 
-Un agrégat c’est une grappe de classes, d’objets, de concepts de l’app. Donc, la tête d’agrégat c’est le sommet d’une grappe. C’est l’objet qui contient les autres. Dans notre app, vu qu’on va avoir un stockage de données simple sans base de données (on pourrait avoir une BD classique, mais il faudrait structurer les entitées à sauvegardées et les convertir vers le domaine), on va avoir des grosses grappes. Tant qu’à loader en mémoire un compte d’utilisateur, on va loader ses passes et ses factures aussi.
+An aggregate is a bunch of classes (objects, concepts) of the app. So, an aggreagate head is to top of the bunch. It's the object that contains all the others. In our app, since we'll have a simple storage of data with no database (we could have a classic DB, but we would have to structure some entities to save and convert them into the domain), we'll have some big bunches. Since we have to load a user's account in memory, we'll also load their passes and bills.
 
-Logiquement, les têtes d’agrégats seront la base des routes qu’on peut appeler sur notre app. Donc, c’est les endpoints. En tout cas, si on doit décider nos routes qui agissent sur un concept dans une grappe, on doit aller en ordre vers le concept voulu, à partir de la tête.
+Logically, aggregate heads will be the base of the routes you can call on our app. So, they are the endpoints. Well, if we have to decide what the routes that acts on a concept in a aggregate are, we might as well follow the route to this concept, from the aggregate head.
 
-Par exemple, pour créer un compte, on va appeler la route `/accounts`. Pour aller chercher les factures d’un compte, on va appeler `/accounts/:accountId/bills`. Le prochain article va aller plus en détails là-dedans.
+For instance, to create an account, we'll call `/accounts`. To get the bills of an account, we'll call `/accounts/:accountId/bills`. The next post will go further into details about that.
 
-Dans l’app, je veux une seule tête d’agrégat : les comptes.
+In this app, I see a single aggregate head : the accounts.
 
-## Conceptualisation de domaine
+## Domain conceptualization
+
+___
 
 Ok!
 
