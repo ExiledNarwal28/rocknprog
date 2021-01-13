@@ -131,7 +131,7 @@ Bam, we got our final diagram of simplified domain!
 ![Conceptualization of the domain's main classes](/public/img/posts/diagram-conceptualization-classes.png)
 *(conceptualization of the domain's main classes, available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
 
-One last thing, here is the dependencies for the packages. As you can see, there's no circular dependency and the whole thing makes sense : 
+One last thing, here are the dependencies for the packages. As you can see, there's no circular dependency and the whole thing makes sense : 
 
 ![Conceptualization of the domain's main packages](/public/img/posts/diagram-conceptualization-packages.png)
 *(conceptualization of the domain's main packages, available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
