@@ -47,7 +47,7 @@ Dans l’app, je veux une seule tête d’agrégat : les comptes.
 
 Ok!
 
-Maintenant, on va décortiquer les classes principales du domaine et la grappe complète pour tout ça. Je vais me servir de diagrams.net, anciennement draw.io, qui est une app que j’aime beaucoup.
+Maintenant, on va décortiquer les classes principales du domaine et la grappe complète pour tout ça. Je vais me servir de [diagrams.net](https://www.diagrams.net/), anciennement draw.io, qui est une app que j’aime beaucoup.
 
 Voici le diagramme complet que j'ai fait. Le reste de cet article sera consacré à expliquer chaque concept et pourquoi il est structuré ainsi.
 
@@ -66,11 +66,11 @@ Commençons avec les comptes et les utilisateurs. J’avais dit que la seule tê
 
 `User` : Ok! L’utilisateur. En fait, c’est les informations d’un compte. Comme j’ai dis, on en a juste un par compte présentement, mais c’est pas trop grave. On va avoir les informations qu’on envoie à la création de compte, donc l’email, le nom complet, le poids et la taille. On va aussi avoir la liste des passes d’accès et l’instant de création, qui sera utilisé à des fins de reporting.
 
-Est-ce qu’on a besoin d’un identifiant pour l’utilisateur? Pour tout de suite, pas besoin de UserId ou de quoi dans le genre. On sait déjà que l’email est unique, alors on peut se servir de ça éventuellement. Mais, si on a un jour plusieurs utilisateurs par compte, le mieux serait d’avoir un `UserId`. Pas là.
+Est-ce qu’on a besoin d’un identifiant pour l’utilisateur? Pour tout de suite, pas besoin de `UserId` ou de quoi dans le genre. On sait déjà que l’email est unique, alors on peut se servir de ça éventuellement. Mais, si on a un jour plusieurs utilisateurs par compte, le mieux serait d’avoir un `UserId`. Pas là.
 
 Good! Je vais mettre ces concepts-là en vert. Ils seront dans le même package, alors c’est parfait.
 
-`Instant` : L’instant c’est quoi? C’est pour représenter un temps précis. Je vais le mettre loin, car on va s’en servir pas mal. C’est en bleu, **c’est un autre package**.
+`Instant` : L’instant c’est quoi? C’est pour représenter un temps précis. C’est en bleu, **c’est un autre package**.
 
 ### Package : `AccessPasses`
 
@@ -104,11 +104,11 @@ Alright, les factures et l’argent.
 
 `BillReason` : Ensuite, on a quoi? La raison, c’est une énumération. Easy enough.
 
-`Money` : L’argent, on va en faire une classe aussi. Pour tout de suite, c’est un value object. Par contre, dans le futur, ça pourrait devenir assez intelligent, avec des concepts comme la conversion d’une currency à l’autre. En tout cas, mettons ça là. Anyway, les passes d’accès pour un type de période devront s’en servir aussi. Sans aller trop loin, ça va être une classe en mémoire qui a un map. On va retourner un prix, un Money, en fonction d’un type de période.
+`Money` : L’argent, on va en faire une classe aussi. Pour tout de suite, c’est un value object. Par contre, dans le futur, ça pourrait devenir assez intelligent, avec des concepts comme la conversion d’une currency à l’autre. En tout cas, mettons ça là. Anyway, les prix de passes d’accès pour un type de période devront s’en servir aussi. Sans aller trop loin, ça va être une classe en mémoire qui a un map. On va retourner un prix, un `Money`, en fonction d’un type de période.
 
 `BillPayment` : Les paiements. Pourquoi je veux une classe pour ça? Encore une fois, c’est parce que je connais mes besoins de reporting. On veut pouvoir stocker efficacement chaque paiement qui a été fait. Donc, on va en faire une liste d’une classe à part, qui contient seulement l’instant et le montant payé.
 
-En rouge, parce que le capitalisme, c’est mal.
+En rouge, parce que le capitalisme c’est mal.
 
 Hey, pourquoi c’est pas les comptes qui possèdent les factures? Honnêtement, ça ferait du sens, mais je sais que dans mon reporting j’ai besoin de savoir si une passe d’accès a des paiements dans sa facture. Alors, je place ça là. Si on a d’autres façons de créer des bills, il va sûrement falloir changer la structure un peu, mais rien de trop grave.
 
@@ -116,7 +116,7 @@ Hey, pourquoi c’est pas les comptes qui possèdent les factures? Honnêtement,
 
 Okkkkkkkkkkkkkkkkk, les osties de rapports.
 
-J’ai planifié le domaine pour qu’il soit assez wise pour pas avoir besoin d’une classe lightweight où on enregistre des événements dans l’app. Nice! Par contre, on a quand même besoin de quelques concepts définis : les dimensions, métriques, périodes, scopes, …
+J’ai planifié le domaine pour qu’il soit assez wise pour pas avoir besoin d’une classe lightweight où on enregistre des événements dans l’app. Nice! Par contre, on a quand même besoin de quelques concepts définis : les dimensions, métriques, périodes, scopes, ...
 
 Je vais omettre ça de la conceptualisation. On va voir ça au complet dans un ou plusieurs articles sur le sujet. Rendu là, on va devoir dessiner encore.
 

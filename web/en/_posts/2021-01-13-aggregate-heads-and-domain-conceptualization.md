@@ -45,103 +45,101 @@ In this app, I see a single aggregate head : the accounts.
 
 ## Domain conceptualization
 
-___
+Okay!
 
-Ok!
+Now, let's find out the main classes of the domain and the whole aggregate for all that. I'll use [diagrams.net](https://www.diagrams.net/), which used to be draw.io, an app I really like.
 
-Maintenant, on va décortiquer les classes principales du domaine et la grappe complète pour tout ça. Je vais me servir de diagrams.net, anciennement draw.io, qui est une app que j’aime beaucoup.
+Here is the complete diagram. The rest of this post will be dedicated to explain each concept and why it's structured that way.
 
-Voici le diagramme complet que j'ai fait. Le reste de cet article sera consacré à expliquer chaque concept et pourquoi il est structuré ainsi.
+![Conceptualization of the domain's main classes](/public/img/posts/diagram-conceptualization-classes.png)
+*(conceptualization of the domain's main classes, available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
 
-![Conceptualisation des classes principales du domaine](/public/img/posts/diagram-conceptualization-classes.png)
-*(conceptualisation des classes principales du domaine, disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
-
-Je vais y aller package par package. Pour éviter la confusion, lorsque je parle d'un concept (d'une classe) qui va dans un autre package, ça sera en gras.
+I'll go package by package. To remove any confusion, when I'll talk about a concept (a class) that goes into another package, it will be written in bold.
 
 ### Package : `Accounts`
 
-Commençons avec les comptes et les utilisateurs. J’avais dit que la seule tête d’agrégat va être les comptes. Si je l’ai dis, ça doit être vrai.
+Let's start with accounts and users. Like I said, the only aggregate head are the accounts. If I said it, it must be true.
 
-`Account` : Y’a quoi dans le compte? On a un ID et l’utilisateur. Éventuellement, on pourrait avoir une liste de users, mais c’est pas encore le cas.
+`Account` : What's in an account? We got an ID and a user. Eventually, we could have a list of users, but that's not the case right now.
 
-`AccountId` : Good! L’ID d’account c’est quoi ça? Ça va être un UUID. Par contre, on va faire un wise move et on va déplacer ça dans une autre classe. On va en faire un value object. Comme ça, si le type d’ID change, disons qu’on veut un nombre plutôt qu’un UUID, ça réduit le ripple effect et on a pas grand chose à changer à l’app et les tests.
+`AccountId` : Good! The account ID, what is that? It'll be a UUID. Though, we'll make a wise move and we'll place this in another class. So, we'll make a value object out of it. This way, if the type of ID ever changes, if we need a number instead of a UUID, it reduces the ripple effect and we won't have much to change to the app and the tests.
 
-`User` : Ok! L’utilisateur. En fait, c’est les informations d’un compte. Comme j’ai dis, on en a juste un par compte présentement, mais c’est pas trop grave. On va avoir les informations qu’on envoie à la création de compte, donc l’email, le nom complet, le poids et la taille. On va aussi avoir la liste des passes d’accès et l’instant de création, qui sera utilisé à des fins de reporting.
+`User` : Ok! The user. In fact, it's the information of an account. Like I said, we only got one per account right now, but that's not a problem. We'll have the information we send at the account creation, so the email, full name, weight and height. We'll also have a list of access passes and the creation instant, that will be used for reporting.
 
-Est-ce qu’on a besoin d’un identifiant pour l’utilisateur? Pour tout de suite, pas besoin de UserId ou de quoi dans le genre. On sait déjà que l’email est unique, alors on peut se servir de ça éventuellement. Mais, si on a un jour plusieurs utilisateurs par compte, le mieux serait d’avoir un `UserId`. Pas là.
+Do we need an identifier for users? Now right now, no need for a `UserId` or anything alike. We already know that the email is unique, so we could temporarily use that. But, if, one day, we have many users per account, we should add a `UserId`. Story for another time.
 
-Good! Je vais mettre ces concepts-là en vert. Ils seront dans le même package, alors c’est parfait.
+Good! I'll put those in green. They are in the same package, so that's cool.
 
-`Instant` : L’instant c’est quoi? C’est pour représenter un temps précis. Je vais le mettre loin, car on va s’en servir pas mal. C’est en bleu, **c’est un autre package**.
+`Instant` : What is an instant? It represents a precise time. It's in blue, since **it's in another package**.
 
 ### Package : `AccessPasses`
 
-Alright, on va faire le package des passes d’accès.
+Alright, let's do the access passes package.
 
-`AccessPass` : La passe d’accès contient son code, son instant de création, son type de période, les périodes qu’elle couvre, la liste d’utilisation de l'ascenseur et sa facture. Je vais mettre une liste de périodes vu qu’on peut avoir plusieurs dates. Pour les passes d’une semaine ou d’un mois, on aura une seule période dans la liste.
+`AccessPass` : The access pass contains its code, creation instant, period type, covered periods, elevator usage list and bill. The covered periods are a list, since we can have many dates. If the pass is for a week or a month, it'll have a single period in its list.
 
-`AccessPassCode` : Ok, et pour le code? Comme l’ID de compte, on va en faire un value object. Ça va être un string qu’on va générer à notre façon. On verra comment générer ça rendu au code. Tout ce qu’on a à savoir pour tout de suite, c’est que c’est une classe à part de la passe d’accès.
+`AccessPassCode` : Ok, what about the code? Like the account's ID, it's a value object. It'll be a string that will generate somehow. We'll see how to create that when we'll code it. For right now, just know it's a class separated from the access pass.
 
-`PeriodType` : Le type de période? C’est une énumération, ben simple.
+`PeriodType` : The period type is a simple enumeration.
 
-Aight, on met ça en violet.
+Alright, let's make this purple.
 
-`Period` : La période, **ça va dans le package avec les instants**. C’est un début et une fin. Pas besoin d’aller plus loin.
+`Period` : The period **goes into the same package as the instants**. It's a start and an end. No need to go any further.
 
-`Date`, `Week` et `Month` : Wait, comment on fait pour display les informations sur les dates, les semaines et les mois? Sans entrer dans les détails, on va avoir des classes complexes qui représentent ces périodes-là. Je vais les placer **dans le package des instants**.
+`Date`, `Week` and `Month` : Wait, how do we display the information for dates, weeks and months? Without going into details, we'll have complex classes that represent those period types. I'll place them **in the same package as the instants**.
 
 ### Package : `ElevatorUsages`
 
-`ElevatorUsage` et `ElevatorDirection` : Pour tout de suite, l’utilisation de l’ascenseur doit seulement être enregistrer pour les rapports. Je veux qu’on ait un domaine intelligent, qui n’a pas besoin de classe d’événement pour les rapports. Donc, on va faire une classe pour l’utilisation de l’ascenseur. On a juste besoin de l’instant et de la direction. La direction est une énumération.
+`ElevatorUsage` and `ElevatorDirection` : For right now, the elevator usage is only saved for reports. I want to have an intelligent domain that does not need a classe to register events happening for the sake of reporting. So, we'll have a class for the elevator usage. We only need the instant and the direction. The direction is an enumeration.
 
-Un beau orange pour ça. Je pourrais mettre ça dans le package des passes d’accès, mais j’trouve que ça manque de consistance avec les autres concepts des passes.
+A beautiful orange for that. I could put those two into the access passes package, but I feel like it lacks consistency with the other concepts.
 
 ### Package : `Bills`
 
-Alright, les factures et l’argent.
+Alright, bills and money.
 
-`Bill` : Les factures c’est une classe qui contient le numéro de facture, l’instant de création, la raison, la description, le montant et une liste de paiements.
+`Bill` : Bills are a class that contains the bill number, creation instant, reason, description, amount and payment list.
 
-`BillNumber` : Le numéro de facture, c’est comme l’ID de compte et le code de passe d’accès, on veut un value objet. Donc, c’est une classe à part.
+`BillNumber` : Bill number is very alike account ID and access pass code, so we want a value object, a class separated from bills.
 
-`BillReason` : Ensuite, on a quoi? La raison, c’est une énumération. Easy enough.
+`BillReason` : What else? Reason, it's an enumeration. Easy enough.
 
-`Money` : L’argent, on va en faire une classe aussi. Pour tout de suite, c’est un value object. Par contre, dans le futur, ça pourrait devenir assez intelligent, avec des concepts comme la conversion d’une currency à l’autre. En tout cas, mettons ça là. Anyway, les passes d’accès pour un type de période devront s’en servir aussi. Sans aller trop loin, ça va être une classe en mémoire qui a un map. On va retourner un prix, un Money, en fonction d’un type de période.
+`Money` : Money will also be its own class. Let's start with a value object. Maybe, in the future, we could have something more intelligent, like having some concepts of currency conversion. Anyways, let's place it there for now. Access pass prices for a period type will also use this. Without going too far, that will be a class that contains a map. It will return a price, a `Money`, in function of a period type.
 
-`BillPayment` : Les paiements. Pourquoi je veux une classe pour ça? Encore une fois, c’est parce que je connais mes besoins de reporting. On veut pouvoir stocker efficacement chaque paiement qui a été fait. Donc, on va en faire une liste d’une classe à part, qui contient seulement l’instant et le montant payé.
+`BillPayment` : Payments. Why do I make a class for this? Once again, it's because I'm aware of my reporting needs. We want to store each payment that was made. So, we'll make a list and a separate class that only contains the instant and the amount paid.
 
-En rouge, parce que le capitalisme, c’est mal.
+In red, because capitalism is evil.
 
-Hey, pourquoi c’est pas les comptes qui possèdent les factures? Honnêtement, ça ferait du sens, mais je sais que dans mon reporting j’ai besoin de savoir si une passe d’accès a des paiements dans sa facture. Alors, je place ça là. Si on a d’autres façons de créer des bills, il va sûrement falloir changer la structure un peu, mais rien de trop grave.
+Hey, why don't accounts contain the bills? Honestly, that would make sense, but I know that for the sake of reporting, I need to know if an access pass has payments on its bill. So, I place it there. If we ever have other bill reasons, we'll have to change this structure a bit, but it's nothing to worry about.
 
 ### Package : `Reports`
 
-Okkkkkkkkkkkkkkkkk, les osties de rapports.
+Okkkkkkkkkkkkkkkkk, the fucking reports.
 
-J’ai planifié le domaine pour qu’il soit assez wise pour pas avoir besoin d’une classe lightweight où on enregistre des événements dans l’app. Nice! Par contre, on a quand même besoin de quelques concepts définis : les dimensions, métriques, périodes, scopes, …
+I planned the domain so that it's wise enough not to need a lightweight class of event registering. Nice! Though, we still have to define some concepts : dimensions, metrics, periods, scopes, ...
 
-Je vais omettre ça de la conceptualisation. On va voir ça au complet dans un ou plusieurs articles sur le sujet. Rendu là, on va devoir dessiner encore.
+I won't add this to the conceptualization. We'll see all of those in one or many posts about this precise subject. At that point, we'll have to draw again.
 
-`Quarter` et `Year` : Pour tout de suite, sachez juste qu’avec ce qu’on a là, on va avoir des classes qui définissent des semaines, mois, quarts d’années et années. D’ailleurs, va falloir se servir de ça pour l’achat de passes, pour trouver les périodes couvertes par les passes. Alright, je vais juste ajouter les périodes des rapports au diagramme. **Ça va dans le même package que les instants et les périodes.**
+`Quarter` and `Year` : With what we have right now, let's just know we'll have classes that defined weeks, months, quarters and years. Some of those are already used by access passes. Alright, I'll just add the missing periods to the diagram. **That's gonna be in the `Instants` package.**
 
-Remarquez que la flèche ici est blanche plutôt que noire. Ça sera pas de l’héritage aussi simple que ça, y va y avoir pas mal de concepts à plugger, mais pour un diagramme rapide, c’est en masse.
+Note that those arrows are white, not black. It's not gonna be some simple heritage, there's gonna be a lot of concepts to implement. For a quick diagram, a different arrow color is enough.
 
-## Retour sur le diagramme complet
+## Back to the complete diagram
 
-Bam, on a le diagramme final de notre domaine simplifié!
+Bam, we got our final diagram of simplified domain!
 
-![Conceptualisation des classes principales du domaine](/public/img/posts/diagram-conceptualization-classes.png)
-*(conceptualisation des classes principales du domaine, disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
+![Conceptualization of the domain's main classes](/public/img/posts/diagram-conceptualization-classes.png)
+*(conceptualization of the domain's main classes, available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
 
-Juste un dernier truc, voici les dépendances entre les packages de l’app. Comme vous pouvez voir, on a pas de dépendance circulaire et ça fait quand même pas mal de sens :
+One last thing, here is the dependencies for the packages. As you can see, there's no circular dependency and the whole thing makes sense : 
 
-![Conceptualisation des packages princpaux du domaine](/public/img/posts/diagram-conceptualization-packages.png)
-*(conceptualisation des packages principaux du domaine, disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
+![Conceptualization of the domain's main packages](/public/img/posts/diagram-conceptualization-packages.png)
+*(conceptualization of the domain's main packages, available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
 
-YES ON EST VENU À BOUT DU DOMAINE. FAUT JUSTE LE CODER ASTHEURE.
+YEAH WE ARE DONE WITH THE DOMAIN. WE ONLY NEED TO CODE IT NOW.
 
-J’espère que vous avez aimé ça. J’suis quand même fier de la job qu’on a fait, notre domaine va être ben beau pis ben logique. J’suis content.
+I hope you liked this. I'm actually proud of the job we've done. Our domain is pretty and logical. I'm happy.
 
-Le prochain article va être sur les endpoints et les routes dans notre API REST. Aussi, j’vais montrer vite c’est quoi ça, REST.
+The next post will be about endpoints and routes in our REST API. Also, I'll got into what is REST.
 
-Parfa, à la prochaine, salut là!
+Until next time, see ya!
