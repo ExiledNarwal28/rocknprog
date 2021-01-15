@@ -1,5 +1,4 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/rocknpro
-    - /bin/cp -R /web $DEPLOYPATH
+    - jekyll build --baseurl /home/rocknpro/repo/web --destination /home/rocknpro/public_html
