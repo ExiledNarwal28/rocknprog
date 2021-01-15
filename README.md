@@ -26,9 +26,3 @@ docker-compose -f docker-compose.yml up --build; docker-compose -f docker-compos
 ```
 
 You can then access the website at [http://localhost](http://localhost).
-
-### Push to production environment
-
-```shell
-git push subtree --prefix web heroku master
-```
