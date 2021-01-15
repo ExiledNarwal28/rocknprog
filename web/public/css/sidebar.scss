@@ -4,6 +4,12 @@
 
 @import "mixins";
 
+h1.site-title-author {
+  font-size: 2rem;
+  margin-top: .5rem;
+  font-weight: normal;
+}
+
 .sidebar-img {
   border-radius: 100%;
   max-width: 120px;

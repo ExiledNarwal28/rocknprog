@@ -2,6 +2,11 @@
     <div class="container sidebar-sticky">
         <div class="sidebar-about">
             <img src="/public/img/hackerman.jpg" alt="" class="sidebar-img"/>
+            <h1 class="site-title-author">
+                <a href="/{{ page.lang }}/about">
+                    {{ site.data.translations['author'][page.lang] }}
+                </a>
+            </h1>
             <h1>
                 <a href="/{{ page.lang }}">
                     {{ site.title }}
