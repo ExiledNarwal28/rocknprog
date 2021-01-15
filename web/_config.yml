@@ -17,5 +17,6 @@ sass:
   sass_dir: public/css
 
 exclude:
+  - vendor
   - Rakefile
   - static.json
