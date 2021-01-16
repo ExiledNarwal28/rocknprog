@@ -1,4 +1,6 @@
 ---
 deployment:
   tasks:
-    - jekyll build --baseurl /home/rocknpro/repo/web --destination /home/rocknpro/public_html
+    - source /home/rocknpro/rubyvenv/jekyll__app/2.6/bin/activate
+    - cd /home/rocknpro/web
+    - jekyll build --destination /home/rocknpro/public_html
