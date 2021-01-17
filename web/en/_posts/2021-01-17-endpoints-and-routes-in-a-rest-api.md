@@ -1,111 +1,111 @@
 ---
 layout: post
-title:  "Endpoints et routes dans un API REST"
+title:  "Endpoints and routes in a API REST"
 date:   2021-01-17
 categories: [project, rest]
-lang: fr
+lang: en
 lang-ref: endpoints-and-routes-in-a-rest-api
 ---
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/w_jQdXXseWs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Salut!
+Yo!
 
-Aujourd’hui, on décide les routes et les endpoints de notre app, donc de la couche d’API REST.
+Today, we decide routes and endpoints in our app or, more precisely, our REST API layer.
 
-Hey, on commence à avoir pas mal de job de fait. On a les fonctionnalités, les récits, les use-cases et un diagramme des classes principales du domaine. Bien joué, gang. Mais! Il nous reste encore beaucoup de matière à couvrir avant de coder.
+Hey, we now have a lot of work done. We have our functionalities, stories, use-cases and a main classes diagram. Well done, people. But! We still have a lot of things to cover before coding.
 
-Avant de commencer l'article, j’veux faire un p’tit shoutout à une entreprise insane. J’ai changé l’hébergement de mon site Web d’Heroku à [Shelter-Bay Cloud](https://shelterbaycloud.ca), un hébergeur écologique de ma région, la Côte-Nord. C’est le genre de projet malade que je supporte à fond, alors quand mon boy, Émile, m’a reach out pour me demander si je voulais être hébergé chez eux, j’ai tout de suite été down.
+Before going into this post, I wanna make a quick shoutout to an insane enterprise. I changed host for my website, from Heroku to [Shelter-Bay Cloud](https://shelterbaycloud.ca), an ecological web hosting company from my region, the Côte-Nord. That's the kind of sick project I open-heartily support, so when my boy, Émile, reached me out to ask if I wanted to be hosted at their place, I was a 100% down.
 
-Sérieux, si vous voulez héberger une application ou un site, que ce soit pour du développement ou pour de la production, pour vous ou pour de la clientèle, j’vous recommande vraiment d’y faire un tour. C’est fucking important d’encourager les entreprises locales avec de belles valeurs, pis vous aurez jamais de la proximité et du contact humain du genre avec des méga-entreprises.
+If you want to host an application or a website, for development or for production, for you or for a client, I really recommend you check it out. It's super important to support local companies with beautiful values and you won't have this kind of proximity and human contact with bigass enterprises.
 
-Hésitez pas à les contacter, peu importe votre type d’application, y’a moyen de faire affaire et vous aurez tout le support donc vous aurez besoin. Y’a des forfaits pour les petits développeurs, so no worries si c’est juste pour essayer!
+Don't hesite to contact them, whatever kind of application you got, there's a way to work with them and you'll have all the support you need. There are pricings for small developpers, so no worries if you only want to try.
 
-Vraiment, merci à la gang de Shelter-Bay Cloud, vous faites une job de malade.
+Really, thanks to the people at Shelter-Bay Cloud, you're doing an amazing job.
 
-Bon. Hey, avant d’entrer dans le sujet d’aujourd’hui, je veux juste revenir vite sur les diagrammes de l'[article précédent]({% post_url 2021-01-13-aggregate-heads-and-domain-conceptualization %}). J’ai remarqué un petit truc qui manque dans les passes d’accès. Pour les dates, les semaines et les mois, on a les périodes pour utiliser l’ascenseur avec la date donnée. Par contre, pour les one-time uses, on fait quoi? J'ajouterai rien au diagramme, vu que c’est un brouillon, anyway. Éventuellement, on va voir la création d’issue, alors je le mentionnerai quand on fera les issues du use-case pour ça. De toute façon, les issues, bien entendu, viennent des stories et use-cases, et non du diagramme du dernier article.
+Okay. Hey, before getting into today's subject, I wanna come back to the diagrams of [my last post]({% post_url 2021-01-13-aggregate-heads-and-domain-conceptualization %}). One small thing was off concerning the access passes. For some dates, weeks or months, we got periods that we can use to validate access passes when using the elevator. Though, for one-time use passes, what do we do? I won't add anything to the existing diagram, as it's a draft, anyway. Eventually, we will go into issue creation, so I'll mention it when we'll write issues for that use-case. Anyway, issues, of course, come from stories and use-cases, not from the last post's diagram.
 
-## Alright, c'est quoi un API REST?
+## Alright, and what is a REST API?
 
-Okay, mais, aujourd’hui, c’est API REST, endpoints et routes. C’est quoi ça un API REST?
+Okay, but, today, it's REST API, endpoints and routes. What's a REST API?
 
-Alright. API c’est [Application Programming Interface](https://en.wikipedia.org/wiki/API). C’est une application, ou plus souvent une partie d’application, qui reçoit des requêtes et envoie des réponses. Ce qui s’en sert, ça peut être n’importe quoi : un site web, une app mobile, un interface de ligne de commandes, Postman, name it. Dans notre application à nous, l’API c’est un port de la couche externe de notre architecture hexagonale. C’est la partie de notre application qui s’occupe de la communication HTTP standard.
+API stands for [Application Programming Interface](https://en.wikipedia.org/wiki/API). It's an application, or, more likely, a part of an application, that received requests and sends responses. Anything could use it : a website, a mobile app, a command-line interface, Postman, name it. In our application, the API is a port of the external layer of our hexagonal architecture. It's the part of our application that deals with standard HTTP communication.
 
-Fun fact : ma blonde pensait que je prononçait mal “Appli” quand je disais “API”. NON MADAME J’CONNAIS LA PATENTE BEN PLUS QUE ÇA.
+Moreover, REST stands for [Representational State Transfer](https://en.wikipedia.org/wiki/Representational_state_transfer). It's a software architecture based on a concept of resources. We often say of a REST API that it's RESTful. That simply means it follows the REST ideology of representing collections, items and actions. I'll shoot you some examples.
 
-Ensuite, REST c’est [Representational State Transfer](https://en.wikipedia.org/wiki/Representational_state_transfer). C’est une architecture logicielle basée sur un concept de ressources. On dit souvent d’un API REST qu’il est RESTful. Ça veut juste dire qu’il suit la mentalité REST dans sa représentation de collections, d’items et d’actions. Je vais vous shooter des exemples.
+Here's a [super good guide that goes into each different concepts](https://www.smashingmagazine.com/2018/01/understanding-using-rest-api/). There's a lot of documentation about this subject online, but this one is simple and solid. I'll use it for what follows.
 
-Voici un [super bon guide qui explique les différents concepts](https://www.smashingmagazine.com/2018/01/understanding-using-rest-api/). Y’a de la doc en masse en ligne sur le sujet, mais celle-là est simple et solide. J’vais m’en servir pour expliquer ce qui suit.
+In REST, there are four main principles : resources, methods, headers and data (body).
 
-Y’a quatre principes fondamentaux en REST : les ressources, les méthodes, les headers et le data (body).
+I'll explain all of this with some stupid example. We'll say we have a REST API that represents books, which all contain pages. We can get books and their pages in bunches or individually.
 
-Je vais expliquer tout ça avec des exemples bidons. On va dire qu’on a un API REST qui représente des livres, qui contiennent chacuns des pages. On peut aller chercher les livres et les pages dans leur ensemble ou individuellement.
+### Resources
 
-### Ressources
+Resources are represented as clearly as possible, in collections and items. For instance, to get the book collection, we may use `/books`. To get a single book, so an item within that collection, we can use `/books/:bookId`. If we want the collection of pages for a given book, we have `/books/:bookId/pages`.
 
-Les ressources, on les représente le plus clairement possible, en collections et en items. Par exemple, pour aller chercher la collection des livres, on peut utiliser `/books`. Pour aller chercher un livre individuel, donc un item de la collection des livres, on peut utiliser `/books/:bookId`. Si on veut la collection des pages pour un livre, on a `/books/:bookId/pages`.
+Note that, here, `/books` is an endpoint. It's also the aggregate head in this example. In fact, the path to pages is also an endpoint, but I like seeing endpoints as the starting points in the API. Sorry if this generates some confusion. When we'll code all that, we'll convert each endpoint into a resource (the class, not the REST resource).
 
-Notez qu’ici, `/books` est un endpoint. C’est aussi une tête d’agrégat dans cet exemple. En fait, le path jusqu’à pages est aussi un endpoint, mais j’aime visualiser les endpoints comme étant les points d’entrées dans l’API. Désolé si cela porte à confusion. Rendu au code, ça aide à convertir chaque endpoint en ressource (la classe, pas la ressource REST).
+One last thing for resources : in REST, we call the path to a resource a URI, not a URL. URI is [Uniform Resource Identifier](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), while URL is [Uniform Resource Locator](https://en.wikipedia.org/wiki/URL). The difference is that when we want to access a resource from a root-endpoint (a simple slash, or something like /api, /apiv3, ...) using URL, we write directly the protocol , like "http://..." or "ftp://...", and the domain. With a URI' we can use many methods, which are actions, on a resource. Speaking of methods...
 
-Derniers détails pour les ressources : en REST, on appelle le path vers une ressource un URI, pas un URL. URI c’est [Uniform Resource Identifier](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) alors que URL c’est [Uniform Resource Locator](https://en.wikipedia.org/wiki/URL). La différence, c’est qu’ici on veut accèder à une ressource à partir d’un root-endpoint (le simple slash, ou genre /api, /apiv3, …) en URL, écrit directement le protocole, genre “http://…” ou “ftp://…”, et le domaine. Avec un URI, on peut permettre plusieurs méthodes qui sont des actions sur une resources. D’ailleurs...
+### Methods
 
-### Méthodes
+As you surely know, there are [many HTTP methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods). Though, in REST, we mostly use four methods, which are pretty alike CRUD (Create-Read-Update-Delete) : 
 
-Ok comme vous savez sûrement y’a [pas mal de méthodes HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods). Par contre, en REST, on utilise principalement quatre méthodes, qui reviennent slightly au CRUD (Create-Read-Update-Delete) :
+ * `POST` : Creating items within a collection or make an action. Often, when you don't know where to place or what to do with an action on a resource, it's a POST on the resource with an action name or something alike.
+ * `GET` : Getting collections, items or information. We can use query params to filter of change our request.
+ * `PUT` : Modifying a resource. Some people use it like a `POST`, but fuck em, that's bad.
+ * `DELETE` : Deleting a resource.
 
- * `POST` : Création d’item dans une collection ou action portée à l’app. Souvent, si vous ne savez pas trop où placer ou quoi faire avec une action sur une ressource, c’est un POST sur la ressource en question avec un nom d’action ou quelque chose de similaire. 
- * `GET` : Obtention de collection, d’item ou d’information dans le genre. On peut utiliser des query params pour filtrer ou modifier la requête.
- * `PUT` : Modification d’une ressource. Y’a des gens qui s’en servent comme un `POST`, mais fuck em, ça pue.
- * `DELETE` : Suppression d’une ressource.
+We can send a body (like some JSON data) with any of the mentioned four methods. Though, that would be shit. Normally, we only do that with `POST` or `PUT`. `GET` and `DELETE` logically do not need a body and that would be an offense to send one. If you think that's necessary to your API, rework your routes, there's a way to do better. Otherwise, write me.
 
-Vous pouvez envoyer un body (comme du data en JSON) avec n’importe laquelle de ces quatres méthodes. Par contre, ça serait de la merde. Normalement, on fait seulement ça avec `POST` et `PUT`. `GET` et `DELETE` n’ont logiquement pas besoin de body et ça serait un blasphème d’en envoyer un. Si vous pensez que c’est nécessaire à votre API, revoyer vos routes un peu, y’a moyen de faire ça clean. Sinon, écrivez-moi!
+With the examples of books and pages, here's what we would have : 
 
-Avec les exemples des livres et des pages, voici ce que ça pourrait donner :
-
- * `POST /books` : Création d’un livre
- * `GET /books` : Liste de tous les livres
- * `DELETE /books` : Suppression de tous les livres (wash, pas super, on évite ça)
- * `GET /books/:bookId` : Détails d’un livre
- * `PUT /books/:bookId` : Modification d’un livre
- * `DELETE /books/:bookId` : Suppression d’un livre
- * `GET /books/:bookId/pages` : Liste les pages d’un livre
+ * `POST /books` : Creating a book
+ * `GET /books` : Listing all books
+ * `DELETE /books` : Deleting all books (not cool, we'll avoid that)
+ * `GET /books/:bookId` : Getting a book's details
+ * `PUT /books/:bookId` : Modifying a book
+ * `DELETE /books/:bookId` : Deleting a book
+ * `GET /books/:bookId/pages` : Listing all pages of a book
  * ...
-   
+
 ### Headers
 
-Un [header (en-tête) HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers) c’est les informations qu’on envoie avec un call HTTP, que ça soit une requête ou une réponse. De notre bord, dans les deux cas, on doit spécifier que le type de data du body est du JSON. Sinon, les requêtes des rapports devront être authentifiées, c’qui se gère avec le header.
+An [HTTP header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers) is the information we send with an HTTP call, be it a request or a response. In our application, in both cases, we'll specify the data type of the body is JSON. Other then that, requests to get reports must be authenticated, which is handled by the HTTP header.
 
-Évidemment, on va beaucoup se servir des headers pour les [status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) de nos réponses. Qu’ossé ça? C’est un code de trois chiffres classé comme ça :
+Of course, we'll use headers a lot for our responses' [statuses](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status). What's that? It's a three-digit code classes like so : 
 
  * `1xx` : Information
- * `2xx` : Yeah, ça marche
+ * `2xx` : Yeah, it works
  * `3xx` : Redirection
- * `4xx` : Ton erreur (client)
- * `5xx` : Mon erreur (application)
-   
-Une action ou une obtention de ressource s’est bien passé? `200 OK`.
+ * `4xx` : Your mistake (client)
+ * `5xx` : My mistake (application)
 
-Une création s’est faite comme il faut? `201 CREATED`.
+An action or data obtaining went well? `200 OK`.
 
-Données invalides envoyées? `400 BAD REQUEST`.
+A creation was successful? `201 CREATED`.
 
-T’as pas l’authentification pour accéder à de quoi? `401 UNAUTHORIZED`.
+Invalid data received? `400 BAD REQUEST`.
 
-T’as pas le droit de faire de quoi et c’est pas lié à de l’authentification? `403 FORBIDDEN`.
+You don't have the authentication to get something? `401 UNAUTHORIZED`.
 
-Numéro de référence de ressource qui n’existe pas ou URI inexistant? `404 NOT FOUND`.
+You cannot do something and it's not related to authentication? `403 FORBIDDEN`.
 
-L’application a chié? `500 INTERNAL SERVER ERROR`. Ça arrivera jamais ça, on est trop pro.
+Resource reference that does not exist or unknown URI? `404 NOT FOUND`.
 
-Autre truc qu’on va se servir, le header location. Ça, on va s’en servir quand on crée une ressource pour montrer son numéro de référence (genre, le ID ou le code généré) en envoyer le URI complet vers la nouvelle ressource.
+The application went wrong? `500 INTERNAL SERVER ERROR`. That won't happen, we're too good.
 
-Mettons que tu crées un nouveau livre avec `POST /books`, on va répondre en location `/books/:bookId` avec le nouvel ID.
+Another thing we'll use is the header location. We'll use that when creating a resource, to display it's reference (like a ID or a generated code) and send the URI to the new resource.
+
+Let's say you create a new book with `POST /books`, we'll respond `/books/:bookId` as a location with the new ID.
 
 ### Data
 
-Finalement, y’a le data. Comme j’ai dis quand on était aux méthodes, quand on fait un `POST` ou un `PUT`, on peut envoyer un body à notre requête. Dans notre cas, c’est le JSON qu’on envoie.
+Finally, there's the data. Like I said when we we're looking at methods, when we do a `POST` or a `PUT`, we can send a body with our request. In our case, that will always be JSON.
 
-## Décision des endpoints et des routes
+## Deciding endpoints and routes
+
+___
 
 Good, maintenant que tout ça est défini, on va appliquer cette belle matière à notre projet. On va se servir des [use-cases](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases) et du [diagramme des classes](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram) pour trouver les URI et les actions à poser dans l’app.
 
