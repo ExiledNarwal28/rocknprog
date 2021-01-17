@@ -232,7 +232,7 @@ Good, alors on va avoir `/elevatorUsage/:accessPassCode/goUp` pour aller en haut
 
 Donc, on envoie du JSON pour la date. On répond `200 OK` si ça marche, `400 BAD REQUEST` si la date est invalide, `403 FORBIDDEN` si la passe ne couvre pas la date donnée ou si l’utilisateur est déjà en haut lorsqu’il monte, ou qu’il est déjà en bas lorsqu’il descend et `404 NOT FOUND` si la passe n’existe pas.
 
-P’tite question : pourquoi `200 OK` et pas `202 ACCEPTED`? Selon le naming, ça ferait plus de sens, non? Sorry, les noms des status codes sont pas toujours on-point. `202 ACCEPTED` implique que la requête est acceptée mais encore en train d’être processée. Donc, dans notre cas, 200 OK fait plus de sens.
+P’tite question : pourquoi `200 OK` et pas `202 ACCEPTED`? Selon le naming, ça ferait plus de sens, non? Sorry, les noms des status codes sont pas toujours on-point. `202 ACCEPTED` implique que la requête est acceptée mais encore en train d’être processée. Donc, dans notre cas, `200 OK` fait plus de sens.
 
 ```markdown
 - /elevatorAccess
@@ -259,9 +259,7 @@ P’tite question : pourquoi `200 OK` et pas `202 ACCEPTED`? Selon le naming, ç
 
 Ah, les rapports. Pour tous les rapports qu’on a à produire, c’est un seul URI avec des query parameters. C’est un simple `GET /reports`.
 
-Ce endpoints demande une authentification. Les query parameters, on a metrics, year et scope qui sont obligatoires. Sinon, y’a dimensions, month et aggregations qui sont optionnels.
-
-On répond `200 OK` si ça marche, `400 BAD REQUEST` si on a des query parameters invalides et `401 UNAUTHORIZED` si l’authentification est incorrecte. On répond la liste des périodes demandées pour le rapport.
+Ce endpoint demande une authentification. Les query parameters, on a metrics, year et scope qui sont obligatoires. Sinon, y’a dimensions, month et aggregations qui sont optionnels. On répond `200 OK` si ça marche, `400 BAD REQUEST` si on a des query parameters invalides et `401 UNAUTHORIZED` si l’authentification est incorrecte. On répond la liste des périodes demandées pour le rapport.
 
 ```markdown
 - /reports
@@ -308,6 +306,6 @@ Vous savez quand je parle de documentation de calls d’API? Au final, ça, c’
 
 Hey, ça fait plusieurs articles où on fait le projet pis on a juste un crisse de wiki. J’tanné. Au prochain article, on va commencer le repo sur GitHub. J’vais vous montrer quels fichiers sont importants à avoir à base du repository et quelles sont les sections les plus importantes sur le repo GitHub. Ces notions-là s'appliquent bien sûr aussi à GitLab, Bitbucket ou pas mal n’importe quel autre hébergeur de code source.
 
-Par contre! Là, la gang, je commence ma dernière session à temps plein à l’uni. J’ai produit des vidéos à la vitesse de l’éclair depuis le début du channel, mais là j’vais avoir moins de temps libre. Faut ben que j’finisse mon bacc. J’estime être capable de faire une à deux vidéos par mois, mais j’vous tiendrez au courant. Hésitez jamais à m’écrire, en commentaire YouTube ou par courriel, si y’a quoi que ce soit, si vous avez des questions, ou si vous voulez des trucs pour faire survivre vos plantes.
+Par contre! Là, la gang, je commence ma dernière session à temps plein à l’uni. J’ai produit des articles à la vitesse de l’éclair depuis le début du blogue, mais là j’vais avoir moins de temps libre. Faut ben que j’finisse mon bacc. J’estime être capable de faire une à deux articles par mois, mais j’vous tiendrez au courant. Hésitez jamais à m’écrire, en commentaire YouTube ou par courriel, si y’a quoi que ce soit, si vous avez des questions, ou si vous voulez des trucs pour faire survivre vos plantes.
 
 Alright, gros love, à la prochaine, salut là!

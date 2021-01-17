@@ -105,209 +105,204 @@ Finally, there's the data. Like I said when we we're looking at methods, when we
 
 ## Deciding endpoints and routes
 
-___
+Good, now that we got many things defined, let's apply those to our project. We'll use the [use-cases](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases) and the [main classes diagram](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram) to find the URIs and the actions in our app.
 
-Good, maintenant que tout ça est défini, on va appliquer cette belle matière à notre projet. On va se servir des [use-cases](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases) et du [diagramme des classes](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram) pour trouver les URI et les actions à poser dans l’app.
+![Conceptualization of the domain's main classes](/public/img/posts/diagram-conceptualization-classes.png)
+*(conceptualization of the domain's main classes, available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
 
-![Conceptualisation des classes principales du domaine](/public/img/posts/diagram-conceptualization-classes.png)
-*(conceptualisation des classes principales du domaine, disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Main-classes-diagram))*
+What actions do we have in our app?
 
-C’est quoi les actions et les obtentions de ressources qu’on a dans l’app?
+ * Create an account (an a user, at the same time)
+ * Buy an access pass
+ * List an account's access passes (a user's, actually)
+ * List an account's bills
+ * Pay a bill
+ * Use the elevator
+ * Ask for a report
 
- * Créer un compte (et utilisateur, en même temps)
- * Acheter une passe
- * Lister les passes d’un compte (d'un utilisateur, en fait)
- * Lister des factures d’un compte
- * Payer une facture
- * Utiliser l’ascenseur
- * Demander un rapport
+Ok, let's do this step by step.
 
-Ok, faisons ça étape par étape.
+### Route : Create an account
 
-### Route : Créer un compte
+According to our holy main classes diagram, `Account` is the aggregate head of pretty much everything. So, it's gonna be the starting point of what an account possesses, like access passes and bills.
 
-Selon notre divin diagramme de classes, `Account` c’est notre tête d’agrégat pour pas mal tout. Donc, ça sera notre point d’entrée pour ce que possède un compte, soit les passes d’accès et les factures.
-
-Comment on crée un utilisateur? `POST /accounts`. On reçoit du JSON et on répond la location du nouvel account avec son ID. `201 CREATED` si c’est good, `400 BAD REQUEST` si les données sont invalides.
+How do we create a user? `POST /accounts`. We receive JSON and respond the location of the newly created account with its ID. `201 CREATED` if it's good, `400 BAD REQUEST` if the data is invalid.
 
 ```markdown
-- /accounts
-  - POST
-    - Based on the user creation use-case
-    - Creates an account and a user for the application
-    - Receives user information as JSON
-    - Responds 201 CREATED when successful
-    - Responds 400 BAD REQUEST when received data is invalid
-    - Responds /accounts/:accountId as a header location when successful
+ - /accounts
+   - POST
+     - Based on the user creation use-case
+     - Creates an account and a user for the application
+     - Receives user information as JSON
+     - Responds 201 CREATED when successful
+     - Responds 400 BAD REQUEST when received data is invalid
+     - Responds /accounts/:accountId as a header location when successful
 ```
-*(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+*(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
 
-### Route : Acheter une passe
+### Route : Buy an access pass
 
-Ok, et comment on achète une passe? Les passes seront sous `/accounts/:accountId/accessPasses`. Comme on a un seul utilisateur par compte, même si c’est l’utilisateur et non le compte qui possède les passes, ça fait du sens dans un API REST.
+Ok, and how do we buy a pass? Passes will be under `/accounts/:accountId/accessPasses`. Since we have a single user by account, even if it's the user and not the account that owns the passes, it still makes sense in a REST API.
 
-C’est donc un `POST /accounts/:accountId/accessPasses`. On reçoit le JSON pour la nouvelle passe et on répond son code en header location. Ça crée la passe et la facture, je vais préciser ça. J’parlerai pas du email, vu que ça concerne pas la couche d’API. Même affaire pour la création de compte. Les status, c’est quoi? `201 CREATED` si c’est good, `400 BAD REQUEST` si les données sont invalides et `404 NOT FOUND` si l’account ID existe pas.
+So it's a `POST /accounts/:accountId/accessPasses`. We received JSON for the new pass and we respond its code as a header location. It created the pass and the bill, which I will explicitly write. I won't talk about emails, because it does not concern the API layer. Same thing for account creation. What are the statuses? `201 CREATED` if it's good, `400 BAD REQUEST` is the data is invalid and `404 NOT FOUND` if the account ID does not exist.
 
 ```markdown
-- /accounts
+ - /accounts
+   - /:accountId
+     - /accessPasses
+       - POST
+         - Based on the access pass creation use-cases
+         - Creates an access pass and adds it the user
+         - Creates a bill for buying an access pass and adds it to the access pass
+         - Receives access pass information as JSON
+         - Responds 201 CREATED when successful
+         - Responds 400 BAD REQUEST when received data is invalid
+         - Responds 404 NOT FOUND when account ID is non existent
+         - Responds /accounts/:accountId/accessPasses/:accessPassCode as a header location when successful
+```
+*(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+
+### Route : List an account's access passes
+
+Good, listing passes? It's a collection under the accounts, so we just need a `GET`. `200 OK` if it works, `404 NOT FOUND` if the account ID does not exist. We respond passes as JSON.
+```markdown
+ - /accounts
   - /:accountId
     - /accessPasses
-      - POST
-        - Based on the access pass creation use-cases
-        - Creates an access pass and adds it the user
-        - Creates a bill for buying an access pass and adds it to the access pass
-        - Receives access pass information as JSON
-        - Responds 201 CREATED when successful
-        - Responds 400 BAD REQUEST when received data is invalid
+      - GET
+        - Based on the access passes listing use-case
+        - Responds 200 OK when successful
         - Responds 404 NOT FOUND when account ID is non existent
-        - Responds /accounts/:accountId/accessPasses/:accessPassCode as a header location when successful
+        - Responds the list of access passes owned by the user as JSON
 ```
-*(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+*(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
 
-### Route : Lister les passes d’un compte
+### Route : List an account's bills
 
-Good, lister les passes? C’est une collection sous les comptes et on a juste besoin d’un `GET`. `200 OK` si ça marche, `404 NOT FOUND` si l’account ID existe pas. On répond les passes en JSON.
+Very similarly, to list an account's bills, we'll use a `GET`. `200 OK` if it works, `404 NOT FOUND` if the account ID does not exist. We respond bills as JSON.
 
 ```markdown
-- /accounts
-  - /:accountId
-    - /accessPasses
+ - /accounts
+   - /:accountId
+     - /bills
        - GET
-         - Based on the access passes listing use-case
+         - Based on the bills listing use-case
          - Responds 200 OK when successful
          - Responds 404 NOT FOUND when account ID is non existent
-         - Responds the list of access passes owned by the user as JSON
+         - Responds the list of bills owned by the user as JSON
 ```
-*(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+*(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
 
-### Route : Lister des factures d’un compte
+### Route : Pay a bill
 
-Très similairement, pour lister les factures d’un compte, on va faire un `GET`. `200 OK` si c’est good, `404 NOT FOUND` si l’account ID est not found. On répond les bills en JSON.
+Good, and paying a bill? We'll have `/accounts/:accountId/bills/:billNumber`, but how do we pay. If you remember, I said that `POST` can also be used for actions on a resource. If we want to be RESTful, we'll have the action `pay` on an item of the bill collection.
+
+We receive JSON of the amount to pay. `200 OK` if it works, `400 BAD REQUEST` if the amount to pay is invalid, `404 NOT FOUND` if the account ID or bill number does not exist. The bill number must not only exist, it must exist within the account. It's pretty clear with how our resources are structured in the URI. Finally, we respond the updated bill as JSON.
 
 ```markdown
-- /accounts
-  - /:accountId
-    - /bills
-      - GET
-        - Based on the bills listing use-case
-        - Responds 200 OK when successful
-        - Responds 404 NOT FOUND when account ID is non existent
-        - Responds the list of bills owned by the user as JSON
+ - /accounts
+   - /:accountId
+     - /bills
+       - /:billNumber
+         - /pay
+           - POST
+             - Based on the bill payment use-case
+             - Receives amount to pay as JSON
+             - Responds 200 OK when successful
+             - Responds 400 BAD REQUEST if given amount to pay is invalid
+             - Responds 404 NOT FOUND when account ID or bill number is non existent
+             - Responds updated bill as JSON
 ```
-*(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+*(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
 
-### Route : Payer une facture
+### Route : Use the elevator
 
-Good, et pour payer une facture? On va bien avoir `/accounts/:accountId/bills/:billNumber`, mais comment on paie? Vous vous souvenez, quand j’ai dis que `POST` permettait aussi de porter des actions sur une ressource? Si on veut être très RESTful, on va avoir l’action `pay` sur un item dans la collection de factures.
+Alright, we're at the elevator usage. Logically, wince we use passes, we will have an action on them with a `POST`, no?
 
-On reçoit le JSON du montant à payer. `200 OK` si ça marche, `400 BAD REQUEST` si le montant à payer est invalide, `404 NOT FOUND` si l’account ID ou le bill number n’existe pas. Le bill number ne doit pas seulement exister, il doit exister dans le compte. C’est évident avec comment les ressources sont emboîtées les unes dans les autres dans l’URI! Finalement, on répond la facture à jour en JSON.
+Now wouldn't that make some goddamn sense, but there's a problem. Look at the [stories](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories#adventure-3--elevator-access) : “They enter only the access pass code.”.
+
+The way I see it, the endpoint `/accounts` and everything beneath it is for account management, buying and paying. When we use the elevator, we do not want to enter our account ID. We only want to use our access passe code, like if we scanned to pass at the elevator entrance.
+
+To me, it's necessary to have a second endpoint. Anyway, if we want to move this into the passes, it's not too complicated. So, I'll make another endpoint. Personally, I don't like putting a reference / identifier in a request body. I'll throw it in the path.
+
+Good, we'll have `/elevatorUsage/:accessPassCode/goUp` to go up and `/elevatorUsage/:accessPassCode/goDown` to go down. We could place the code in the JSON, but I think this way of doing things is pretty clean. Let me know if you believe it should be changed. Once again, it's not a big change.
+
+So, we send JSON for the date. We respond `200 OK` if it works, `400 BAD REQUEST` if the date is invalid, `403 FORBIDDEN` if the pass do not cover the given date or if the user is already up in the station when going up, or already down on Earth when going down, and `404 NOT FOUND` if the pass do not exist.
+
+Quick question : why `200 OK` and not `202 ACCEPTED`? According those names, it would make more sense, no? Sorry, names of status codes are not always on-point. `202 ACCEPTED` implies that the request has been accepted, but is still being processed. In our case, `200 OK` makes more sense.
 
 ```markdown
-- /accounts
-  - /:accountId
-    - /bills
-      - /:billNumber
-        - /pay
-          - POST
-            - Based on the bill payment use-case
-            - Receives amount to pay as JSON
-            - Responds 200 OK when successful
-            - Responds 400 BAD REQUEST if given amount to pay is invalid
-            - Responds 404 NOT FOUND when account ID or bill number is non existent
-            - Responds updated bill as JSON
+ - /elevatorAccess
+   - /:accessPassCode
+     - /goUp
+       - POST
+         - Based on the elevator access use-case to go up
+         - Receives date as JSON
+         - Responds 200 OK when successful
+         - Responds 400 BAD REQUEST if given date is invalid
+         - Responds 403 FORBIDDEN when access pass do not cover given date or user is already up in the station
+         - Responds 404 NOT FOUND when access pass code is non existent
+     - /goDown
+       - POST
+         - Based on the elevator access use-case to go down
+         - Receives date as JSON
+         - Responds 200 OK when successful
+         - Responds 400 BAD REQUEST if given date is invalid
+         - Responds 403 FORBIDDEN when access pass do not cover given date or user is already up down on Earth
 ```
-*(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+*(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
 
-### Route : Utiliser l’ascenseur
+### Route : Ask for a report
 
-Alright, on est rendu à l’utilisation de l’ascenseur. Logiquement, comme on se sert des passes, on va avoir une action à poser sur les passes avec un `POST`, non?
+Ah, reports. For all the reports we'll have to produce, a single URI with query parameters can do the job : a simple `GET /reports`.
 
-Estie que ça fait du sens pis que j’serais down, mais y’a un bémol. Checkez ça dans [les récits](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories#adventure-3--elevator-access) : “They enter only the access pass code.”.
-
-Comment je vois ça, c’est que le endpoint `/accounts` et tout ce qui est en dessous, c’est vraiment pour la gestion de compte, pour l’achat et le paiement. Lorsqu’on utilise l’ascenseur, on veut pas entrer notre account ID. On veut seulement entrer notre code de passe d’accès, comme si on scannait notre passe avant d’entrer dans l’ascenseur.
-
-Pour moi, c’est obligatoire d’avoir deux endpoints, deux points d’entrée différents. Anyway, si jamais on veut l’imbriquer sous les passes dans les comptes, sachez que le changement sera pas bien compliqué. Alors, on va vraiment faire un nouveau endpoint pour tout de suite! Par contre, personnellement, j’avoue pas être friand de placer une référence / identifiant dans le corps de la requête. Le plus possible, j’essaie de les placer dans le path.
-
-Good, alors on va avoir `/elevatorUsage/:accessPassCode/goUp` pour aller en haut et `/elevatorUsage/:accessPassCode/goDown` pour aller en bas. On pourrait aussi déplacer le code dans le JSON, mais je pense que cette solution est quand même clean. Faites-moi savoir si vous pensez que non, encore une fois, c’est un changement très simple à faire.
-
-Donc, on envoie du JSON pour la date. On répond `200 OK` si ça marche, `400 BAD REQUEST` si la date est invalide, `403 FORBIDDEN` si la passe ne couvre pas la date donnée ou si l’utilisateur est déjà en haut lorsqu’il monte, ou qu’il est déjà en bas lorsqu’il descend et `404 NOT FOUND` si la passe n’existe pas.
-
-P’tite question : pourquoi `200 OK` et pas `202 ACCEPTED`? Selon le naming, ça ferait plus de sens, non? Sorry, les noms des status codes sont pas toujours on-point. `202 ACCEPTED` implique que la requête est acceptée mais encore en train d’être processée. Donc, dans notre cas, 200 OK fait plus de sens.
+This endpoint needs an authentication. Metrics, year and scope query parameters are necessary. Dimensions, month and aggregations query parameters are optional. We repond `200 OK` if it works, `400 BAD REQUEST` if we have invalid query parameters and `401 UNAUTHORIZED` if the authentication is incorrect. We respond the list of periods for the requested report.
 
 ```markdown
-- /elevatorAccess
-  - /:accessPassCode
-    - /goUp
-      - POST
-        - Based on the elevator access use-case to go up
-        - Receives date as JSON
-        - Responds 200 OK when successful
-        - Responds 400 BAD REQUEST if given date is invalid
-        - Responds 403 FORBIDDEN when access pass do not cover given date or user is already up in the station
-        - Responds 404 NOT FOUND when access pass code is non existent
-    - /goDown
-      - POST
-        - Based on the elevator access use-case to go down
-        - Receives date as JSON
-        - Responds 200 OK when successful
-        - Responds 400 BAD REQUEST if given date is invalid
-        - Responds 403 FORBIDDEN when access pass do not cover given date or user is already up down on Earth
+ - /reports
+   - GET
+     - Based on the event reporting use-cases
+     - Requires authentication
+     - Receives metrics, year and scope as obligatory query parameters
+     - Receives dimensions, month and aggregations as optional query parameters
+     - Responds 200 OK when successful
+     - Responds 400 BAD REQUEST when one or many received query parameters are invalid or missing
+     - Responds 401 UNAUTHORIZED when authentication is incorrect
+     - Responds list of report periods as JSON
 ```
-*(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+*(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
 
-### Route : Demander un rapport
+## And finally
 
-Ah, les rapports. Pour tous les rapports qu’on a à produire, c’est un seul URI avec des query parameters. C’est un simple `GET /reports`.
-
-Ce endpoints demande une authentification. Les query parameters, on a metrics, year et scope qui sont obligatoires. Sinon, y’a dimensions, month et aggregations qui sont optionnels.
-
-On répond `200 OK` si ça marche, `400 BAD REQUEST` si on a des query parameters invalides et `401 UNAUTHORIZED` si l’authentification est incorrecte. On répond la liste des périodes demandées pour le rapport.
+Bam, done! We got our [planned routes for our REST API](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes). It's as follows : 
 
 ```markdown
-- /reports
-  - GET
-    - Based on the event reporting use-cases
-    - Requires authentication
-    - Receives metrics, year and scope as obligatory query parameters
-    - Receives dimensions, month and aggregations as optional query parameters
-    - Responds 200 OK when successful
-    - Responds 400 BAD REQUEST when one or many received query parameters are invalid or missing
-    - Responds 401 UNAUTHORIZED when authentication is incorrect
-    - Responds list of report periods as JSON
+ - /accounts
+   - POST
+   - /:accountId
+     - /accessPasses
+       - POST
+       - GET
+     - /bills
+       - GET
+       - /:billNumber
+         - /pay
+           - POST
+ - /elevatorAccess
+   - /:accessPassCode
+     - /goUp
+       - POST
+     - /goDown
+       - POST
+ - /reports
+   - GET
 ```
-*(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+*(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
 
-## Et finalement
+You know, when I talk about API documentation? Well, that's a mix of the document we made today and the request bodies described in the use-cases. But... the documentation we have been doing since my first post is just planning. We didn't code anything yet. The thing with API documentation, it's that it's not requirements for what your app must do, it's what your app actually does. It's what it expects to received and what is responds. Don't worry, we'll look into that soon enough.
 
-Bam, done! On a donc la [planification des routes pour notre API REST](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes). Elle est donc comme suit : 
+Hey, we've only built our wiki yet. It's enough. In the next post, we'll start working on our GitHub repo. I'll show you which files must be added at the repository's base and which sections are the most important on GitHub. Know that all of this also applies to GitLab, Bitbucket or any other source code hosting service.
 
-```markdown
-- /accounts
-  - POST
-  - /:accountId
-    - /accessPasses
-      - POST
-      - GET
-    - /bills
-      - GET
-      - /:billNumber
-        - /pay
-          - POST
-- /elevatorAccess
-  - /:accessPassCode
-    - /goUp
-      - POST
-    - /goDown
-      - POST
-- /reports
-  - GET
-```
-*(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
+But! Folks, I'm starting my last full-time semester of university. I wrote posts at an amazing rate so far, but I will have a lot less free time. I have to get my diploma. I should be able to add one or two post a month. You can always send me an email if I can help you with anything, or if you want tips on plants survival.
 
-Vous savez quand je parle de documentation de calls d’API? Au final, ça, c’est un mélange entre le document qu’on vient de produire et les corps de requêtes décrit dans les use-cases. Mais... la documentation qu’on fait depuis le début du projet, c’est de la planification. On a rien codé encore. L’affaire avec la documentation d’API, c’est que c’est pas une demande pour ce qu’on veut que ça fasse, c’est littéralement ce que notre application fait. Ce qu’elle s’attend à recevoir et ce qu’elle répond. Inquiètez vous pas, on va la faire ensemble en temps et lieux.
-
-Hey, ça fait plusieurs articles où on fait le projet pis on a juste un crisse de wiki. J’tanné. Au prochain article, on va commencer le repo sur GitHub. J’vais vous montrer quels fichiers sont importants à avoir à base du repository et quelles sont les sections les plus importantes sur le repo GitHub. Ces notions-là s'appliquent bien sûr aussi à GitLab, Bitbucket ou pas mal n’importe quel autre hébergeur de code source.
-
-Par contre! Là, la gang, je commence ma dernière session à temps plein à l’uni. J’ai produit des vidéos à la vitesse de l’éclair depuis le début du channel, mais là j’vais avoir moins de temps libre. Faut ben que j’finisse mon bacc. J’estime être capable de faire une à deux vidéos par mois, mais j’vous tiendrez au courant. Hésitez jamais à m’écrire, en commentaire YouTube ou par courriel, si y’a quoi que ce soit, si vous avez des questions, ou si vous voulez des trucs pour faire survivre vos plantes.
-
-Alright, gros love, à la prochaine, salut là!
+Alright, big love, see ya!
