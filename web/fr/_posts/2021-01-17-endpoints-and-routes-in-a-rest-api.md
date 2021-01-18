@@ -45,7 +45,7 @@ Je vais expliquer tout ça avec des exemples bidons. On va dire qu’on a un API
 
 Les ressources, on les représente le plus clairement possible, en collections et en items. Par exemple, pour aller chercher la collection des livres, on peut utiliser `/books`. Pour aller chercher un livre individuel, donc un item de la collection des livres, on peut utiliser `/books/:bookId`. Si on veut la collection des pages pour un livre, on a `/books/:bookId/pages`.
 
-Notez qu’ici, `/books` est un endpoint. C’est aussi une tête d’agrégat dans cet exemple. En fait, le path jusqu’à pages est aussi un endpoint, mais j’aime visualiser les endpoints comme étant les points d’entrées dans l’API. Désolé si cela porte à confusion. Rendu au code, ça aide à convertir chaque endpoint en ressource (la classe, pas la ressource REST).
+Notez qu’ici, `/books` est un endpoint. C’est aussi une tête d’agrégat dans cet exemple. En fait, tous les paths, les routes, jusqu'à des ressource sont des endpoints. Rendu au code, on va essayer de structurer ça le plus logiquement possible en ressource (la classe, pas la ressource REST).
 
 Derniers détails pour les ressources : en REST, on appelle le path vers une ressource un URI, pas un URL. URI c’est [Uniform Resource Identifier](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) alors que URL c’est [Uniform Resource Locator](https://en.wikipedia.org/wiki/URL). La différence, c’est qu’ici on veut accèder à une ressource à partir d’un root-endpoint (le simple slash, ou genre /api, /apiv3, …) en URL, écrit directement le protocole, genre “http://…” ou “ftp://…”, et le domaine. Avec un URI, on peut permettre plusieurs méthodes qui sont des actions sur une resources. D’ailleurs...
 
@@ -226,7 +226,7 @@ Estie que ça fait du sens pis que j’serais down, mais y’a un bémol. Checke
 
 Comment je vois ça, c’est que le endpoint `/accounts` et tout ce qui est en dessous, c’est vraiment pour la gestion de compte, pour l’achat et le paiement. Lorsqu’on utilise l’ascenseur, on veut pas entrer notre account ID. On veut seulement entrer notre code de passe d’accès, comme si on scannait notre passe avant d’entrer dans l’ascenseur.
 
-Pour moi, c’est obligatoire d’avoir deux endpoints, deux points d’entrée différents. Anyway, si jamais on veut l’imbriquer sous les passes dans les comptes, sachez que le changement sera pas bien compliqué. Alors, on va vraiment faire un nouveau endpoint pour tout de suite! Par contre, personnellement, j’avoue pas être friand de placer une référence / identifiant dans le corps de la requête. Le plus possible, j’essaie de les placer dans le path.
+Pour moi, c’est obligatoire d’avoir deux points d'entrée. Si jamais on veut l’imbriquer sous les passes dans les comptes, sachez que le changement sera pas bien compliqué. Alors, on va vraiment faire un nouveau endpoint pour tout de suite! Par contre, personnellement, j’avoue pas être friand de placer une référence / identifiant dans le corps de la requête. Le plus possible, j’essaie de les placer dans le path.
 
 Good, alors on va avoir `/elevatorUsage/:accessPassCode/goUp` pour aller en haut et `/elevatorUsage/:accessPassCode/goDown` pour aller en bas. On pourrait aussi déplacer le code dans le JSON, mais je pense que cette solution est quand même clean. Faites-moi savoir si vous pensez que non, encore une fois, c’est un changement très simple à faire.
 

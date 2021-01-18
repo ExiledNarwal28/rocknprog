@@ -43,7 +43,7 @@ I'll explain all of this with some stupid example. We'll say we have a REST API 
 
 Resources are represented as clearly as possible, in collections and items. For instance, to get the book collection, we may use `/books`. To get a single book, so an item within that collection, we can use `/books/:bookId`. If we want the collection of pages for a given book, we have `/books/:bookId/pages`.
 
-Note that, here, `/books` is an endpoint. It's also the aggregate head in this example. In fact, the path to pages is also an endpoint, but I like seeing endpoints as the starting points in the API. Sorry if this generates some confusion. When we'll code all that, we'll convert each endpoint into a resource (the class, not the REST resource).
+Note that, here, `/books` is an endpoint. It's also the aggregate head of this example. In fact, all paths, all routes, to a resource is an endpoint. When we'll code all that, we'll try to find a structure that is as clear as possible into small resources (here, I mean a class, not a REST resource).
 
 One last thing for resources : in REST, we call the path to a resource a URI, not a URL. URI is [Uniform Resource Identifier](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), while URL is [Uniform Resource Locator](https://en.wikipedia.org/wiki/URL). The difference is that when we want to access a resource from a root-endpoint (a simple slash, or something like /api, /apiv3, ...) using URL, we write directly the protocol , like "http://..." or "ftp://...", and the domain. With a URI' we can use many methods, which are actions, on a resource. Speaking of methods...
 
