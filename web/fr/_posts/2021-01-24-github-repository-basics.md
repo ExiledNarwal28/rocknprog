@@ -11,7 +11,7 @@ lang-ref: github-repository-basics
 
 Salut! Aujourd'hui, on monte les bases de notre repository sur GitHub.
 
-Dans le dernier article, on a concentré nos efforts sur de la documentation de planification du projet, qu’on a mis dans le wiki. C’est assez. On commence à mettre des fichiers dans notre repo. On va commencer par créer les fichiers de documentation importants à avoir dans notre repo. Ensuite, on va jaser des différentes sections qu’on va utiliser pour le projet.
+Dans les derniers articles, on a concentré nos efforts sur de la documentation de planification du projet, qu’on a mis dans le wiki. C’est assez. On commence à mettre des fichiers dans notre repo. On va commencer par créer les fichiers de documentation importants à avoir dans notre repo. Ensuite, on va jaser des différentes sections qu’on va utiliser pour le projet.
 
 ## Fichiers de documentation
 
@@ -25,13 +25,13 @@ Alright, comment on choisit notre licence? J’m’embarquerai pas dans les aspe
 
 Moi, j’me sers de Creative Commons pour mon site web, mes vidéos et le projet, vu que c’est du matériel éducatif et fictif. J’ai choisis [BY-NC-SA version 4](https://creativecommons.org/licenses/by-nc-sa/4.0/), qui stipule que :
 
-- Les gens peuvent partager mon application et mon code comme bon leur semble ;
+- Les gens peuvent partager mon application et mon code ;
 - Les gens peuvent fork mon repo et modifier mon application pour adapter ça à leurs besoins ; 
 - Que ce soit pour partager ou modifier mon code, il faut mentionner que ça vient de moi (BY) ;
 - Mon application et ses éventuelles modifications ne peuvent pas servir à faire du profit (NC) ;
 - La licence que j’utilise doit être utilisée pour chaque futur partage et modification de mon code (SA).
 
-Pour avoir la licence en markdown sur mon repo GitHub, je me sers du [repo de Jan T. Sott](https://github.com/idleberg/Creative-Commons-Markdown), qui contient des versions à jour de licences Creative Commons prête à être utilisée. Dans mon README.md, je vais mentionner que ça vient de lui.
+Pour avoir la licence en markdown sur mon repo GitHub, je me sers du [repo de Jan T. Sott](https://github.com/idleberg/Creative-Commons-Markdown), qui contient des versions à jour de licences Creative Commons prête à être utilisée. Dans mon README, je vais mentionner que ça vient de lui.
 
 En passant, quand vous faites une licence sur GitHub, il suffit d’écrire `LICENSE` comme nouveau nom de fichier à la racine de votre codebase et GitHub va vous proposer plusieurs licences déjà faites. Pratique.
 
@@ -70,25 +70,25 @@ Ensuite, je dis que les tâches seront trackées avec GitHub. On va se servir de
 
 Prochaine section : le project board. Je décris comment je groupe les issues dans un tableau kanban. On va y revenir plus tard dans l'article.
 
-Next, je parle du bug reporting. D’abord, je dis clairement que, dans ma définition, un test (unitaire, intégration ou end-to-end) qui ne passe pas est un bug. Juste pour enlever cette confusion. Après ça, je dis que les bugs spottés doivent être reportées sous forme d’issue avec le bon template. Ensuite, on les place dans le project board, dans la colonne To do, en haut des issues qui ne sont pas des bugs.
+Next, je parle du bug reporting. D’abord, je dis clairement que, dans ma définition, un test (unitaire, intégration ou end-to-end) qui ne passe pas est un bug. Juste pour enlever cette confusion. Après ça, je dis que les bugs spottés doivent être reportées sous forme d’issue avec le bon template. Ensuite, on les place dans le project board, dans la colonne `To do`, en haut des issues qui ne sont pas des bugs.
 
-Ensuite, on parle de pull requests. J’informe les gens qu’on se sert de Git Flow, qui permet de structurer clairement les noms des branches, ce qui a pour effet direct de clarifier les PRs. Je dis que chaque PRs doit passer le CI check et avoir 2 approvals. Je dis comment je veux que les PRs soient nommées et à quel genre de review je m’attends. Ça sert aussi de guide pour faire une bonne review.
+Ensuite, on parle de pull requests. J’informe les gens qu’on se sert de [Git Flow](https://datasift.github.io/gitflow/IntroducingGitFlow.html), qui permet de structurer clairement les noms des branches, ce qui a pour effet direct de clarifier les PRs. Je dis que chaque PRs doit passer le CI check et avoir 2 approvals. Je dis comment je veux que les PRs soient nommées et à quel genre de review je m’attends. Ça sert aussi de guide pour faire une bonne review.
 
-Dans cette section, je dis aussi que notre branche de développement est “develop”. La branche principale, celle du code stable, est “main”. Sidenote : GitHub a droppé le standard de nommer la branche principale “master”, vu que ça faisait référence à de l’esclavage. Je vous encourage fortement à suivre ce trend. Anyway, “main”, ça fait du sens et ça commence aussi par “m”, alors on s’en rappelle bien.
+Dans cette section, je dis aussi que notre branche de développement est `develop`. La branche principale, celle du code stable, est `main`. Sidenote : GitHub a droppé le standard de nommer la branche principale `master`, vu que ça faisait référence à de l’esclavage. Je vous encourage fortement à suivre ce trend. Anyway, `main`, ça fait du sens et ça commence aussi par `m`, alors on s’en rappelle bien.
 
-Finalement, on a la Definition of done. J’explique qu’un milestone est terminé lorsque toutes ses issues le sont et qu’une issue est terminée quand tous ses requirements sont fulfilled et que sa PR est merged.
+Finalement, on a la definition of done. J’explique qu’un milestone est terminé lorsque toutes ses issues le sont et qu’une issue est terminée quand tous ses requirements sont fulfilled et que sa PR est merged.
 
 #### Guide de développement
 
 Le guide de développement concerne l’aspect technique du codebase.
 
-Ça commence par le code style. Je dis quel code style je me sers pour chaque langage utilisé. Ici, j’ai juste Java à mentionner. Je donne aussi la commande pour formater le code. Je dis aussi que je veux voir aucun commentaire dans le code, mis à part des TODOs qui peuvent aider à se retrouver entre les issues. Par contre, je veux pas de TODOs quand on merge dans “main”.
+Ça commence par le code style. Je dis quel code style je me sers pour chaque langage utilisé. Ici, j’ai juste Java à mentionner. Je donne aussi la commande pour formater le code. Je dis aussi que je veux voir aucun commentaire dans le code, mis à part des TODOs qui peuvent aider à se retrouver entre les issues. Par contre, je veux pas de TODOs quand on merge dans `main`.
 
-J'vais faire une parenthèse pour ça : quand je dis "pas de TODOs", c'est qu'il est préférable d'en faire des issues. Un IDE peut trouver tous les TODOs du codebase, ce qui permet de garder la location de changements à faire. Pour ça, c'est chill. Par contre, logiquement, quand on merge dans main, on veut transformer les TODOs restant en issues. Une bonne idée, c'est d'écrire nos TODOs comme ça `TODO #123 : Implement InMemoryAccountRepository.get(...)` où "123" est le numéro de l'issue associée. C'est donc plus facile, lorsqu'on travaille sur cette issue, de voir où nos changements sont à faire.
+J'vais faire une parenthèse pour ça : quand je dis "pas de TODOs", c'est qu'il est préférable d'en faire des issues. Un IDE peut trouver tous les TODOs du codebase, ce qui permet de garder la location de changements à faire. Pour ça, c'est chill. Par contre, logiquement, quand on merge dans `main`, on veut transformer les TODOs restant en issues. Une bonne idée, c'est d'écrire nos TODOs comme ça `TODO #123 : Implement InMemoryAccountRepository.get(...)` où "123" est le numéro de l'issue associée. C'est donc plus facile, lorsqu'on travaille sur cette issue, de voir où nos changements sont à faire.
 
 Pour les commentaires, si votre code est bien fait et que votre archi suit un modèle DDD, c'est bien rare que les commentaires sont utiles. Votre code est assez lisible pour être compris. Voilà pourquoi je préfère simplement dire que j'en veux pas dans mon codebase. Plusieurs commentaires qui explique ce qui se passe, c'est un code smell. Y'a moyen de faire mieux!
 
-Ensuite, je dis que tout le code doit être fait en TDD, soit d’écrire les tests unitaires avant d’implémenter le code. Je décris où sont les tests et comment on les écrit.
+Ensuite, je dis que tout le code doit être fait en TDD (Test Driven Development), soit d’écrire les tests unitaires avant d’implémenter le code. Je décris où sont les tests et comment on les écrit.
 
 Good, on a fini avec le guide de contribution! Voici ce que ça donne : 
 
@@ -168,15 +168,15 @@ D’abord, je place que des issues. Vu qu’une issue a une seule PR, pas besoin
 
 Checkons les colonnes ensemble :
 
-- `Maybe` : C’est les trucs importants à mettre au backlog. C’est pas juste des features, c’est des trucs qui doivent être implémentés, mais pas tout de suite. J’met ça parce que je - préfère avoir une colonne Maybe que d’archiver des issues qui sont importantes.
+- `Maybe` : C’est les trucs importants à mettre au backlog. C’est pas juste des features, c’est des trucs qui doivent être implémentés, mais pas tout de suite. J’met ça parce que je - préfère avoir une colonne `Maybe` que d’archiver des issues qui sont importantes.
 - `To do` : C’est les issues de l’itération en cours.
 - `In progress` : Les issues qu’on est en train de travailler dessus
 - `Under review` : Les issues qui ont une PRs prête à être review ou en train de se faire review. On garde les issues là quand on a des modifications à faire suite à une review.
-- `Done` : Yeah, c’est merged dans develop!
+- `Done` : Yeah, c’est merged dans `develop`!
   
-On pourrait avoir un autre colonne pour différencier les issues réglées dans develop et dans main. J’pense pas avoir besoin de ça, mais c’est une bonne idée.
+On pourrait avoir un autre colonne pour différencier les issues réglées dans `develop` et dans `main`. J’pense pas avoir besoin de ça, mais c’est une bonne idée.
 
-Sérieux, j’encourage toutes les teams à utiliser un tableau en kanban comme le project board de GitHub pour leur issue tracking. Pas juste les product owners et scrum master et tralala. Tous les devs. Ça parle pas ben ben une liste de issues quand c’est planifié pour une grosse période de temps. Ce qui parle, c’est un tableau comme ça, où on peut visualiser notre progression.
+Sérieux, j’encourage toutes les teams à utiliser un tableau en kanban comme le project board de GitHub pour leur issue tracking. Pas juste les product owners et scrum masters et tralala. Tous les devs. Ça parle pas ben ben une liste de issues quand c’est planifié pour une grosse période de temps. Ce qui parle, c’est un tableau comme ça, où on peut visualiser notre progression.
 
 ### Wiki
 
@@ -190,7 +190,7 @@ Si vous faites une librairie ou un package utilisé par plusieurs personnes et q
 
 Alright! Les settings. Ici, vous pouvez choisir quelles sections afficher dans votre repo. Par exemple, si vous vous servez pas du wiki ou du project board, enlevez-les.
 
-Moi, y’a deux choses primordiales que je fais dans les settings : je déploie un GitHub pages pour la documentation d’API et je protège les branches principales (main et develop).
+Moi, y’a deux choses primordiales que je fais dans les settings : je déploie un GitHub pages pour la documentation d’API et je protège les branches principales (`main` et `develop`).
 
 Présentement, j’ai pas de doc d’API. Je vais montrer comment utiliser les GitHub pages rendu là.
 
