@@ -4,6 +4,10 @@
 
 @import "mixins";
 
+.container {
+  max-width: unset;
+}
+
 img[alt=author] {
   max-width: 200px;
   margin: auto;
