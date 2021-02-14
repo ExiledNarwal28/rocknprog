@@ -56,54 +56,53 @@ What do we want to do? Without talking about bills or passes yet. We want to cre
 
 ## Notes on hexagonal architecture
 
-___
+Good, let me warn you, we're getting technical. I'll make an article about this soon, but, right now, I'll explain some things out about [hexagonal architecture](https://blog.octo.com/en/hexagonal-architecture-three-principles-and-an-implementation-example/)
 
-Good, là j’vous averti, on s’en ligne un peu technique. J’vais faire un article qui couvre le sujet soon, mais, live j’vais utiliser des termes pour décrire des concepts dans l'[architecture hexagonale](https://blog.octo.com/en/hexagonal-architecture-three-principles-and-an-implementation-example/).
+So, we'll make ourselves a plan of the architecture. Basically :
 
-So, on va faire un p’tit plan de l’archi. En gros :
+In the middle, there's the domain. That's pure. That's our business logic, our domain rules and how everything works. It's the concepts that we found [last time]({% post_url 2021-01-13-aggregate-heads-and-domain-conceptualization %}) : accounts, users, passes, bills and all that. Those classes we'll have those exact names.
 
-On a, au centre, notre domaine. Ça, c’est pure, c’est nos règles de domaine et comment tout fonctionne. C’est les concepts qu’on a trouvé l’autre fois : les comptes, les utilisateurs, les passes, les factures, pis toute ça. Les classes vont avoir ces noms là pas mal.
+All around the app, it's our ports to external services. Like : 
 
-Tout le tour de l’app, c’est les ports vers des technos externes. Genre :
+- The REST layer, which responds to HTTPS calls as JSON
+  - We'll use `Resource` classes, that represent the access points of the REST layer, the endpoints, the URIs to our items and collections
+- The infrastructure layer, which is our database
+  - We'll use `Repositories`, with methods like `get`, `save` and `update`, that hides under the hood the technical aspects of the database without worrying about it's type (in memory, SQL, NoSQL, ...). If we had a complexe database, `DAO`, [Data Access Object](https://en.wikipedia.org/wiki/Data_access_object), would be useful. Not in our case, we'll use the RAM.
+- Clients, that use other APIs  
+- The system on which the app is running
+- SMTP, for emails
+- Console, and many other
 
-- La couche REST, qui répond à des calls HTTP en JSON
-  - On va utiliser des classes Resource, qui représentent les point d’accès de la couche REST, les endpoints, les URIs vers nos objets et collections
-- La couche d’infrastructure, qui est pas mal notre BD.
-  - On pourrait avoir des Repository, genre `get`, `save`, `update`, qui couvre les aspects techniques de la BD, quelle soit in-memory, sql, nosql, wtv. Si on avait une BD complexes des DAO, Data Access Object, qui représentent les tables de la BD, pourrait être pratiques, mais pas dans notre cas! On veut un accès simple à la mémoire dans la RAM.
-- Les clients, qui utilisent d’autres API
-- Le système sur lequel l’app roule
-- SMTP, pour les courriels
-- La console, pis ben d’autres affaires
+It's how our app communicates with other software.
 
-C’est comment notre app communique avec d’autres softwares, en gros.
+To glue all that up, we got a [service layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Most of the time, a service represents a use case. To say it cute, we say it "orchestrate the domain". That's beautiful. How do we call a unit test for a service? Since it only calls other classes that operates the logic, we just want to see that the data flows the right way and that it's stable, it's an "orchestration test". That means nothing and I love it.
 
-Pour coller tout ça ensemble, on a un [service layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Un service représente souvent un use case. Pour faire cute, on dit que ça “orchestre le domaine”. C’est magnifique. Comment ça s’appelle un test unitaire pour un service? Vu que ça sert juste à appeler les classes qui s’occupent de la logique, on veut juste voir si les données sont passées aux bons endroits dans le bon ordre juste pour que ça reste stable, c’t’un “test d’orchestration”. Ça veut tellement rien dire pis j’aime ça.
-
-Si un service pue, il ressemble à une god class. Si ton domaine est assez intelligent, si il a assez de logique pour se régler lui-même, tes services vont être ben beau ben cute. La preuve, c’est ça qu’on va faire.
+If a service smells, it looks like a god class. If your domain is wise, if it holds enough logic to solve itself, your services will be as pretty as they can be. As a matter of proof, that's how we'll build them.
 
 Ok!
 
-![Diagramme simple d'architecture hexagonale](/public/img/posts/diagram-simple-hexagonal-artchitecture.png)
-*(Diagramme simple d'architecture hexagonale, disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Hexagonal-architecture))*
+![Simple hexagonal architecture diagram](/public/img/posts/diagram-simple-hexagonal-artchitecture.png)
+*(Simple hexagonal architecture diagram, available on the [project's wikiwiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Hexagonal-architecture))*
 
-Le flow normal de notre archi, ou en tout cas celui pour la création de compte / utilisateur, c’est :
+The regular flow of our architecture, or at least the one to create a user / account, is : 
 
-- Le JSON est mappé en objet de requête par la `Resource`, dans la couche d’API. La Resource l’envoie au service pis répond `201 CREATED` avec le endpoint du nouveau compte, soit son nouvel ID.
-- Le service, fait ben des affaires.
-  - D’abord, il assemble la requête en objet valide. Cet assemblage-là est gère par une classe à part qui throw des exceptions pour les différentes raisons que le data est invalide.
-    - Oublions pas, la validation d’email existant, c’est pas live. On a besoin des données enregistrées dans l’app pour ça.
-  - Le service reçoit l’objet `Account`, avec son `User`, valide.
-  - Il l'envoie au `Repository`. Celui-là l’enregistre dans une liste en mémoire.
-    - Le `Repository` crée aussi son ID. On pourrait techniquement faire ça à l’assemblage, mais c’est pratique commune de laisser la BD gérer les références autogénérées. Nous, on va juste plugger un générateur dans la couche d’infrastructure, à côté du repo.
-    - Aussi, vu que le Repository a la liste en mémoire, c’est à lui de vérifier si l’email existe déjà.
-  - Le service reçoit le nouvel account ID.
-  - Il envoie un courriel au email avec l’account ID.
-    - Ça, ça se passe avec une couche SMTP et une couche de filesystem. Pourquoi filesystem? Parce que, dans l’environnement local, on va aller chercher les infos du courriel SMTP pour envoyer le courriel avec un fichier.
-  - Il retourne ça à la couche REST.
+- The JSON data is mapped into request objects by the `Resource`, in the API layer. The `Resource` sends it to the service and responds `201 CREATED` with the newly created account's endpoint, which contains the new account ID.
+- The service does many things.
+  - First, it assembles the object request into valid domain objects. That assembly is handled by a class on its own, which throws exceptions for each different reason the data could be invalid. Don't forget : email duplication validation is not made here. We'll need our saved data for that.
+  - The service receives the valid `Account` object, with its `User`.
+  - It sends it to the `Repository`. It's saved there.
+    - The `Repository` also creates the ID. We could do that at the assembly, but reference generation is normally the job of the storing technology. In our case, we'll have a generator class that does just that.
+    - Also, the `Repository` throws an exception if the email already exists.
+  - The service receives the new account ID
+  - An email is sent with the new account ID
+    - That happends in the SMTP and filesystem layer. Why filesystem? Because, in the local environment, we'll get the credentials for the used STMP email address from a file.
+  - The account ID is then returned to the REST layer
+  
+On top of all that, there's exception mappers. In the app, exceptions are classes we throw. The HTTP is handled by the REST layer, with an exception mapper. Of course, in the `Repository`, the fact that an already existing email is `409 CONFLICT` isn't handled there, we're in the infrastructure layer, the database. We launch an exception and the REST layer catches it.
 
-Aussi, au travers de ça, y’a des exceptions mappers. C’est parce que dans l’app, les exceptions, c’est des classes qu’on throw. Le HTTP, c’est la couche REST qui le gère, avec un exception mapper. Évidemment, dans le repo, quand l’email existe déjà, c’est pas là qu’on gère le fait que c’est un 404 NOT FOUND, on est dans la couche d’infra, de BD. On lance une exception et la couche REST le pogne.
+## Notes on project setup
 
-## Note sur le setup du projet
+___
 
 Ouin, ok pis on a besoin de d’autres tâches. Faut ben setuper le projet.
 

@@ -60,15 +60,15 @@ Good, là j’vous averti, on s’en ligne un peu technique. J’vais faire un a
 
 So, on va faire un p’tit plan de l’archi. En gros :
 
-On a, au centre, notre domaine. Ça, c’est pure, c’est nos règles de domaine et comment tout fonctionne. C’est les concepts qu’on a trouvé l’autre fois : les comptes, les utilisateurs, les passes, les factures, pis toute ça. Les classes vont avoir ces noms là pas mal.
+On a, au centre, notre domaine. Ça, c’est pure, c’est nos règles de domaine et comment tout fonctionne. C’est les concepts qu’on a trouvé [l’autre fois]({% post_url 2021-01-13-aggregate-heads-and-domain-conceptualization %}) : les comptes, les utilisateurs, les passes, les factures, pis toute ça. Les classes vont avoir ces noms là pas mal.
 
 Tout le tour de l’app, c’est les ports vers des technos externes. Genre :
 
 - La couche REST, qui répond à des calls HTTP en JSON
-  - On va utiliser des classes Resource, qui représentent les point d’accès de la couche REST, les endpoints, les URIs vers nos objets et collections
+  - On va utiliser des classes `Resource`, qui représentent les point d’accès de la couche REST, les endpoints, les URIs vers nos objets et collections
 - La couche d’infrastructure, qui est pas mal notre BD.
-  - On pourrait avoir des Repository, genre `get`, `save`, `update`, qui couvre les aspects techniques de la BD, quelle soit in-memory, sql, nosql, wtv. Si on avait une BD complexes des DAO, Data Access Object, qui représentent les tables de la BD, pourrait être pratiques, mais pas dans notre cas! On veut un accès simple à la mémoire dans la RAM.
-- Les clients, qui utilisent d’autres API
+  - On pourrait avoir des `Repository`, avec des méthodes comme `get`, `save` et `update`, qui couvre les aspects techniques de la BD, quelle soit in memory, SQL, NoSQL, ... Si on avait une BD complexes des `DAO`, [Data Access Object](https://en.wikipedia.org/wiki/Data_access_object), qui représentent les tables de la BD, pourrait être pratiques, mais pas dans notre cas! On veut un accès simple à la mémoire dans la RAM.
+- Les clients, qui utilisent d’autres APIs
 - Le système sur lequel l’app roule
 - SMTP, pour les courriels
 - La console, pis ben d’autres affaires
@@ -86,20 +86,20 @@ Ok!
 
 Le flow normal de notre archi, ou en tout cas celui pour la création de compte / utilisateur, c’est :
 
-- Le JSON est mappé en objet de requête par la `Resource`, dans la couche d’API. La Resource l’envoie au service pis répond `201 CREATED` avec le endpoint du nouveau compte, soit son nouvel ID.
+- Le JSON est mappé en objet de requête par la `Resource`, dans la couche d’API. La `Resource` l’envoie au service pis répond `201 CREATED` avec le endpoint du nouveau compte, soit son nouvel ID.
 - Le service, fait ben des affaires.
-  - D’abord, il assemble la requête en objet valide. Cet assemblage-là est gère par une classe à part qui throw des exceptions pour les différentes raisons que le data est invalide.
+  - D’abord, il assemble la requête en objets de domain valides. Cet assemblage-là est gère par une classe à part qui throw des exceptions pour les différentes raisons que le data est invalide.
     - Oublions pas, la validation d’email existant, c’est pas live. On a besoin des données enregistrées dans l’app pour ça.
   - Le service reçoit l’objet `Account`, avec son `User`, valide.
   - Il l'envoie au `Repository`. Celui-là l’enregistre dans une liste en mémoire.
     - Le `Repository` crée aussi son ID. On pourrait techniquement faire ça à l’assemblage, mais c’est pratique commune de laisser la BD gérer les références autogénérées. Nous, on va juste plugger un générateur dans la couche d’infrastructure, à côté du repo.
-    - Aussi, vu que le Repository a la liste en mémoire, c’est à lui de vérifier si l’email existe déjà.
+    - Aussi, vu que le `Repository` a la liste en mémoire, c’est à lui de vérifier si l’email existe déjà.
   - Le service reçoit le nouvel account ID.
   - Il envoie un courriel au email avec l’account ID.
     - Ça, ça se passe avec une couche SMTP et une couche de filesystem. Pourquoi filesystem? Parce que, dans l’environnement local, on va aller chercher les infos du courriel SMTP pour envoyer le courriel avec un fichier.
   - Il retourne ça à la couche REST.
 
-Aussi, au travers de ça, y’a des exceptions mappers. C’est parce que dans l’app, les exceptions, c’est des classes qu’on throw. Le HTTP, c’est la couche REST qui le gère, avec un exception mapper. Évidemment, dans le repo, quand l’email existe déjà, c’est pas là qu’on gère le fait que c’est un 404 NOT FOUND, on est dans la couche d’infra, de BD. On lance une exception et la couche REST le pogne.
+Aussi, au travers de ça, y’a des exceptions mappers. C’est parce que dans l’app, les exceptions, c’est des classes qu’on throw. Le HTTP, c’est la couche REST qui le gère, avec un exception mapper. Évidemment, dans le `Repository`, quand l’email existe déjà, c’est pas là qu’on gère le fait que c’est un `409 CONFLICT`, on est dans la couche d’infra, de BD. On lance une exception et la couche REST le pogne.
 
 ## Note sur le setup du projet
 
