@@ -225,7 +225,6 @@ Requires #10 to be done
 
 This is only for the local environment. Heroku (CD) will need env vars.
 ```
-
 *(disponible sur le [repo du projet](https://github.com/ExiledNarwal28/space-elevator/issues/18))*
 
 ### Implement env var obtention for SMTP credentials (deployed environment)
