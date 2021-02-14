@@ -270,11 +270,11 @@ Just make sure the resource can be accessed and tests can be run.
 ```
 *(disponible sur le [repo du projet](https://github.com/ExiledNarwal28/space-elevator/issues/7))*
 
-Pour ça, j’vais utiliser un label “setup”. C’est pas du règlage de use case, c’est du setup de projet.
+Pour ça, j’vais utiliser un label `setup`. C’est pas du règlage de use case, c’est du setup de projet.
 
 ### Activate Dependabot to check for new packages
 
-Ensuite, j’avais parlé d’activer Dependabot. Ça check les nouvelles versions des packages qu’on utilise.
+J’avais parlé d’activer Dependabot. Ça check les nouvelles versions des packages qu’on utilise.
 
 ```markdown
 # Activate Dependabot to check for new packages
@@ -309,7 +309,7 @@ Pour le CI et CD, on pourrait utiliser un label `devops` plutôt que `setup`, ma
 
 ### Implement CD workflow
 
-On veut pouvoir tester l’app déployée, soit la dernière version de develop. Pour ça, on va utiliser Heroku.
+On veut pouvoir tester l’app déployée, soit la dernière version de la branche `develop`. Pour ça, on va utiliser [Heroku](https://www.heroku.com/).
 
 ```markdown
 # Implement CD workflow
@@ -338,7 +338,7 @@ Requires #9 to be done
 ```
 *(disponible sur le [repo du projet](https://github.com/ExiledNarwal27/space-elevator/issues/12))*
 
-### Create Postman request for POST /accounts
+### Create Postman request for `POST /accounts`
 
 On veut utiliser Postman pour stocker nos requêtes faites à l’API. On va faire un issue pour `POST /accounts`.
 
@@ -349,7 +349,7 @@ Add requests in `resources` directory, from root of repository
 ```
 *(disponible sur le [repo du projet](https://github.com/ExiledNarwal27/space-elevator/issues/13))*
 
-### Create Postman end-to-end tests for POST /accounts
+### Create Postman end-to-end tests for `POST /accounts`
 
 Dans Postman, on veut aussi un test pour le good path, le cas normal de création d’utilisateur, et un test pour chaque extension du use case, chaque raison d’invalidité. C’est des end-to-end tests. Ça test l’app qui roule en envoyant des requêtes.
 
@@ -371,7 +371,7 @@ Add end-to-end tests in `resources` directory, from root of repository
 
 ### Implement End-to-End workflow
 
-Savez-vous c’qui est malade avec les tests end-to-end? On peut les plugger en workflow ou pipeline pour s’assurer que nos tests marchent sur develop. Avec notre CD, on peut automatiser tout ça.
+Savez-vous c’qui est malade avec les tests end-to-end? On peut les plugger en workflow ou pipeline pour s’assurer que nos tests marchent sur `develop`. Avec notre CD, on peut automatiser tout ça.
 
 ```markdown
 # Implement End-to-End workflow
@@ -385,7 +385,7 @@ Requires #11 and #14 to be done.
 
 Petite note, notre app va être unit testée sur tout ce qui fait du sens de unit test. On va avoir quelques tests e2e pour la surface, mais c'est tout.
 
-### Add API documentation for POST /accounts
+### Add API documentation for `POST /accounts`
 
 Ensuite, on veut générer une API doc sur la couche REST. On veut écrire nos routes, les méthodes HTTP et les formats de requêtes et réponses qu’on a.
 
@@ -402,7 +402,7 @@ J’dois encore décider de la techno pour ça. J’hésite entre [Swagger](http
 
 ### Unleash release 0.1.0
 
-Et mes ami-e-s, finalement, on lâche la release 0.1.0. La création d’utilisateur est implémentée sur develop et main. On tag main comme version 0.1.0 et on fini l’itération.
+Et mes ami-e-s, finalement, on lâche la release 0.1.0. La création d’utilisateur est implémentée sur `develop` et `main`. On tag main comme version 0.1.0 et on fini l’itération.
 
 ```markdown
 # Unleash release 0.1.0
@@ -425,13 +425,13 @@ Ciboire. Sérieux j’regarde ça pis wow. J’ai une quantité conne d'articles
 
 ## Placement dans le project board
 
-Alright, on a parlé du project board un peu dans le [dernier article]({% post_url 2021-01-24-github-repository-basics %}). Là, toutes les nouvelles issues ont été placées dans mon project board à cause des règles automatiques que j’ai mis. Mes colonnes du tableau kanban ont des settings pour que les cartes se placent direct. GitHub propose des automatisations déjà faites. Si vous voulez voir les settings de mes colonnes, check out [mon repo](https://github.com/ExiledNarwal28/space-elevator/projects/1) hehehehehehhe
+Alright, on a parlé du project board un peu dans le [dernier article]({% post_url 2021-01-24-github-repository-basics %}). Là, toutes les nouvelles issues ont été placées dans mon project board à cause des règles automatiques que j’ai mis. Mes colonnes du tableau kanban ont des settings pour que les cartes se placent direct. GitHub propose des automatisations déjà faites. Si vous voulez voir les settings de mes colonnes, check out [mon repo](https://github.com/ExiledNarwal28/space-elevator/projects/1) hehehehe
 
 J’les ai juste cordé dans le bon ordre pour les faire logiquement.
 
 ## Conclusion
 
-Simonaque mes chums. On a fini les issues. Bien joué, c’est clair pis ça va être facile à régler.
+Simonaque mes chums. On a fini d'écrire les issues. Bien joué, c’est clair pis ça va être facile à régler.
 
 Très bon chargé de projet. Je le recommande à 100%.
 
