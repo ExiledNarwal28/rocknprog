@@ -146,7 +146,7 @@ Comment on crée un utilisateur? `POST /accounts`. On reçoit du JSON et on rép
 
 Ok, et comment on achète une passe? Les passes seront sous `/accounts/:accountId/accessPasses`. Comme on a un seul utilisateur par compte, même si c’est l’utilisateur et non le compte qui possède les passes, ça fait du sens dans un API REST.
 
-C’est donc un `POST /accounts/:accountId/accessPasses`. On reçoit le JSON pour la nouvelle passe et on répond son code en header location. Ça crée la passe et la facture, je vais préciser ça. J’parlerai pas du email, vu que ça concerne pas la couche d’API. Même affaire pour la création de compte. Les status, c’est quoi? `201 CREATED` si c’est good, `400 BAD REQUEST` si les données sont invalides et `404 NOT FOUND` si l’account ID existe pas.
+C’est donc un `POST /accounts/:accountId/accessPasses`. On reçoit le JSON pour la nouvelle passe et on répond son code en header location. Ça crée la passe et la facture, je vais préciser ça. J’parlerai pas du email, vu que ça concerne pas la couche d’API. Même affaire pour la création de compte. Les status, c’est quoi? `201 CREATED` si c’est good, `400 BAD REQUEST` si les données sont invalides, `409 CONFLICT` si l'email existe déjà et `404 NOT FOUND` si l’account ID existe pas.
 
 ```markdown
 - /accounts
@@ -160,6 +160,7 @@ C’est donc un `POST /accounts/:accountId/accessPasses`. On reçoit le JSON pou
         - Responds 201 CREATED when successful
         - Responds 400 BAD REQUEST when received data is invalid
         - Responds 404 NOT FOUND when account ID is non existent
+        - Responds 409 CONFLICT if email already exists
         - Responds /accounts/:accountId/accessPasses/:accessPassCode as a header location when successful
 ```
 *(disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
@@ -309,3 +310,5 @@ Hey, ça fait plusieurs articles où on fait le projet pis on a juste un crisse 
 Par contre! Là, la gang, je commence ma dernière session à temps plein à l’uni. J’ai produit des articles à la vitesse de l’éclair depuis le début du blogue, mais là j’vais avoir moins de temps libre. Faut ben que j’finisse mon bacc. J’estime être capable de faire une à deux articles par mois, mais j’vous tiendrez au courant. Hésitez jamais à m’écrire, en commentaire YouTube ou par courriel, si y’a quoi que ce soit, si vous avez des questions, ou si vous voulez des trucs pour faire survivre vos plantes.
 
 Alright, gros love, à la prochaine, salut là!
+
+*Cet article a été modifié le 2021-02-13 pour corriger la validation de courriels. Je croyais que `400 BAD REQUEST` ferait l'affaire mais `409 CONFLICT` est plus approprié.*

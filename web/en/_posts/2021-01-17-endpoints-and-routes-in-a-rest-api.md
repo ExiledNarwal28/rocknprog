@@ -144,7 +144,7 @@ How do we create a user? `POST /accounts`. We receive JSON and respond the locat
 
 Ok, and how do we buy a pass? Passes will be under `/accounts/:accountId/accessPasses`. Since we have a single user by account, even if it's the user and not the account that owns the passes, it still makes sense in a REST API.
 
-So it's a `POST /accounts/:accountId/accessPasses`. We received JSON for the new pass and we respond its code as a header location. It created the pass and the bill, which I will explicitly write. I won't talk about emails, because it does not concern the API layer. Same thing for account creation. What are the statuses? `201 CREATED` if it's good, `400 BAD REQUEST` is the data is invalid and `404 NOT FOUND` if the account ID does not exist.
+So it's a `POST /accounts/:accountId/accessPasses`. We received JSON for the new pass and we respond its code as a header location. It created the pass and the bill, which I will explicitly write. I won't talk about emails, because it does not concern the API layer. Same thing for account creation. What are the statuses? `201 CREATED` if it's good, `400 BAD REQUEST` is the data is invalid, `409 CONFLICT` if email already exists and `404 NOT FOUND` if the account ID does not exist.
 
 ```markdown
  - /accounts
@@ -211,6 +211,7 @@ We receive JSON of the amount to pay. `200 OK` if it works, `400 BAD REQUEST` if
              - Responds 200 OK when successful
              - Responds 400 BAD REQUEST if given amount to pay is invalid
              - Responds 404 NOT FOUND when account ID or bill number is non existent
+             - Responds 409 CONFLICT if email already exists
              - Responds updated bill as JSON
 ```
 *(available on the [project's wiki](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes))*
@@ -306,3 +307,5 @@ Hey, we've only built our wiki yet. It's enough. In the next post, we'll start w
 But! Folks, I'm starting my last full-time semester of university. I wrote posts at an amazing rate so far, but I will have a lot less free time. I have to get my diploma. I should be able to add one or two post a month. You can always send me an email if I can help you with anything, or if you want tips on plants survival.
 
 Alright, big love, see ya!
+
+*This article was edited on 2021-02-13 to correct email validation. I though `400 BAD REQUEST` would do the job but `409 CONFLICT` is better suited.*
