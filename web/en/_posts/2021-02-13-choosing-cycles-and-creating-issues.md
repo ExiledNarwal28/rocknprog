@@ -1,60 +1,62 @@
 ---
 layout: post
-title:  "Décision d'itérations et création d'issues"
+title:  "Choosing cycles and creating issues"
 date:   2021-02-13
 categories: [project, git]
-lang: fr
+lang: en
 lang-ref: choosing-cycles-and-creating-issues
 ---
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/WGkTudoBUHY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Yo! C'est l'heure de choisir nos itérations et de créer des issues sur GitHub.
+Yo! The time has come to decide our development cycles and to create issues on GitHub.
 
-## Les itérations
+## The cycles
 
-On va déterminer les itérations pour les [stories](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories) et [use cases](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases) qu’on a fait.
+We'll first decide our cycle for the [stories](https://github.com/ExiledNarwal28/space-elevator/wiki/Personas-and-stories) and [use cases](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases) we have.
 
-Connaissez-vous le [planning poker](https://en.wikipedia.org/wiki/Planning_poker)? Les stories qu’on a fait ça fitte pas mal avec la méthodologie agile scrum. Le planning poker, ça serait la suite logique de la job qu’on a fait avec les stories, soit de déterminer l’effort à faire pour chaque story. On accorde à chaque récit ou tâche un nombre de la suite de Fibonacci et ça nous permet de répartir les tâches, découper les tâches trop grosses en plus petites tâches et trouver les itérations. Chaque itération devrait regrouper des tâches qui donnent à peu près la même somme d’effort.
+Do you know what [planning poker](https://en.wikipedia.org/wiki/Planning_poker) is? The stories we made fits with the agile scrum methodology. Planning poker makes us decide an estimate of the amount of effort to put in each story. We give each of them a number from the Fibonacci sequence. Then, we divide huge tasks and we choose our cycles. Each cycle groups tasks with around the same total effort.
 
-On peut faire ça avec des stories ou avec des fonctionnalités précises dans chaque story, ou même avec des issues.
+We can do that with stories or with precise functionalities within each story, or even with issues.
 
-Nous, on fera pas ça. On a converti les récits en cas d’utilisation technique pis c’est ça qu’on va checker.
+We won't do that. We converted our stories in technical use cases and we'll use directly that.
 
-Estie que j’me casserai pas l’bicycle. On a cinq epics : la création d’utilisateur, la création de passe, l’accès à l’ascenseur, la création / paiement de facture et le reporting. Chaque epic sera une itération vers la version 1.0.0.
+I'll go the easy way : each epic becomes a cycle. That's user creation, pass creation, elevator usage, bill payment and reporting. Each epic will be a cycle to version 1.0.0.
 
-On va donc partir sur l’itération 1 : la version 0.1.0, qui permet de [créer un utilisateur](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-1-:-User-creation).
+We'll start with cycle 1 : version 0.1.1, which we'll implement [user creation](https://github.com/ExiledNarwal28/space-elevator/wiki/Use-cases-1-:-User-creation).
 
-Hey oui, en passant, j’ai changé “adventure” pour “epic” dans mon wiki. C’était une erreur de traduction, j’étais habitué au terme “aventure” en français, mais j’devais pas le traduire littéralement.
+Hey, by the way, I changed "adventure" to "epic" in my wiki. It's a translation mistake. I was used to say "aventure" in French, but I shouldn't translate that literally.
 
-## Premier milestone sur GitHub
+## First milestone on GitHub
 
-Avant de créer les tâches, on va créer notre [milestone](https://docs.github.com/en/github/managing-your-work-on-github/about-milestones). Notre jalon, en bon français.
+Before creating issues, we'll set our [milestone](https://docs.github.com/en/github/managing-your-work-on-github/about-milestones).
 
-C’est la “Release 0.1.0”. Pas besoin de date de fin, parce que j’me stresserai pas avec mes articles ma gang de vous autres.
+That's "Release 0.1.0". We don't need an end date, since I'm not going to stress over my posts :)
 
-Suffit de dire que c’est l’implémentation de la création de compte et d’utilisateur et de dire de quel story et use case ça vient!
+We can describe it as the implementation of account and user creation and tell with story / use case it's coming from.
 
-## Décision des issues
+## Deciding issues
 
-Good, fait que c’est quoi nos tâches? On veut créer un compte et un utilisateur. Le use case représente plusieurs étapes différentes à traiter pour répondre correctement à c’qui est demandé. D’un côté de programmation, chaque chose mentionnée du scénario représente souvent au moins une issue à créer, quelque chose à implémenter.
+Good, so what are our tasks? We want to create an account and a user. The use case represents many steps to respond correctly to what is demanded. From a programming standpoint, each requirement is often a task, something to implement.
 
-On a nos [routes](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes) qui représentent chaque endpoint de notre couche REST pour les use cases. Nous, c’est `POST /accounts`.
+We have our [routes](https://github.com/ExiledNarwal28/space-elevator/wiki/Planned-routes) which represent each endpoint of our REST layer for given use cases We, it's `POST /accounts`.
 
-Qu’est-ce qu’on veut faire? Sans parler pas encore de factures ou de passes. On fait juste la création d’utilisateur ben simple. On veut :
-- Que le compte soit enregistré dans l’application
-- Envoyer des données en JSON à `POST /accounts`
-- Que ça retourne `201 CREATED` si ça marche
-- Que ça retourne `400 BAD REQUEST` si les données sont invalides soit :
-  - Format de courriel invalide
-  - Nom invalide
-  - Poids non-positif
-  - Hauteur non-positive
-- Que ça retourne `409 CONFLICT` si l'email existe déjà
-- Que ça retourne le header location avec le nouvel account id, genre “accounts/:accoundId”
-- Ettttttt que ça envoie un courriel à l’utilisateur
+What do we want to do? Without talking about bills or passes yet. We want to create a simple user. We want : 
+- That the account is saved in the application.
+- Send JSON data to `POST /accounts`
+- That we get `201 CREATED` if it works
+- That we get `400 BAD REQUEST` if it does not work.
+  - Invalid email address format
+  - Invalid name (empty string)
+  - Non-positive weight
+  - Non-positive height
+- That we get `409 CONFLICT` if email already exists.
+- That we return the new account ID as a header location, like `/accounts/:accountId`
+- Anddddd that a email is sent to the new user
 
-## Note sur l’architecture hexagonale
+## Notes on hexagonal architecture
+
+___
 
 Good, là j’vous averti, on s’en ligne un peu technique. J’vais faire un article qui couvre le sujet soon, mais, live j’vais utiliser des termes pour décrire des concepts dans l'[architecture hexagonale](https://blog.octo.com/en/hexagonal-architecture-three-principles-and-an-implementation-example/).
 
