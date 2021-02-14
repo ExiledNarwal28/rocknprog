@@ -58,52 +58,74 @@ Pour les données invalides, ça vaut la peine de séparer “Email qui existe d
 
 ## Note sur l’architecture hexagonale
 
+Good, là j’vous averti, on s’en ligne un peu technique. J’vais faire un article qui couvre le sujet soon, mais, live j’vais utiliser des termes pour décrire des concepts dans l'[architecture hexagonale](https://blog.octo.com/en/hexagonal-architecture-three-principles-and-an-implementation-example/).
+
+So, on va faire un p’tit plan de l’archi. En gros :
+
+On a, au centre, notre domaine. Ça, c’est pure, c’est nos règles de domaine et comment tout fonctionne. C’est les concepts qu’on a trouvé l’autre fois : les comptes, les utilisateurs, les passes, les factures, pis toute ça. Les classes vont avoir ces noms là pas mal.
+
+Tout le tour de l’app, c’est les ports vers des technos externes. Genre :
+
+- La couche REST, qui répond à des calls HTTP en JSON
+  - On va utiliser des classes Resource, qui représentent les point d’accès de la couche REST, les endpoints, les URIs vers nos objets et collections
+- La couche d’infrastructure, qui est pas mal notre BD.
+  - On pourrait avoir des Repository, genre `get`, `save`, `update`, qui couvre les aspects techniques de la BD, quelle soit in-memory, sql, nosql, wtv. Si on avait une BD complexes des DAO, Data Access Object, qui représentent les tables de la BD, pourrait être pratiques, mais pas dans notre cas! On veut un accès simple à la mémoire dans la RAM.
+- Les clients, qui utilisent d’autres API
+- Le système sur lequel l’app roule
+- SMTP, pour les courriels
+- La console, pis ben d’autres affaires
+
+C’est comment notre app communique avec d’autres softwares, en gros.
+
+Pour coller tout ça ensemble, on a un [service layer](https://martinfowler.com/eaaCatalog/serviceLayer.html). Un service représente souvent un use case. Pour faire cute, on dit que ça “orchestre le domaine”. C’est magnifique. Comment ça s’appelle un test unitaire pour un service? Vu que ça sert juste à appeler les classes qui s’occupent de la logique, on veut juste voir si les données sont passées aux bons endroits dans le bon ordre juste pour que ça reste stable, c’t’un “test d’orchestration”. Ça veut tellement rien dire pis j’aime ça.
+
+Si un service pue, il ressemble à une god class. Si ton domaine est assez intelligent, si il a assez de logique pour se régler lui-même, tes services vont être ben beau ben cute. La preuve, c’est ça qu’on va faire.
+
+Ok!
+
+![Diagramme simple d'architecture hexagonale](/public/img/posts/diagram-simple-hexagonal-artchitecture.png)
+*(Diagramme simple d'architecture hexagonale, disponible sur le [wiki du projet](https://github.com/ExiledNarwal28/space-elevator/wiki/Hexagonal-architecture))*
+
+Le flow normal de notre archi, ou en tout cas celui pour la création de compte / utilisateur, c’est :
+
+- Le JSON est mappé en objet de requête par la `Resource`, dans la couche d’API. La Resource l’envoie au service pis répond `201 CREATED` avec le endpoint du nouveau compte, soit son nouvel ID.
+- Le service, fait ben des affaires.
+  - D’abord, il assemble la requête en objet valide. Cet assemblage-là est gère par une classe à part qui throw des exceptions pour les différentes raisons que le data est invalide.
+    - Oublions pas, la validation d’email existant, c’est pas live. On a besoin des données enregistrées dans l’app pour ça.
+  - Le service reçoit l’objet `Account`, avec son `User`, valide.
+  - Il l'envoie au `Repository`. Celui-là l’enregistre dans une liste en mémoire.
+    - Le `Repository` crée aussi son ID. On pourrait techniquement faire ça à l’assemblage, mais c’est pratique commune de laisser la BD gérer les références autogénérées. Nous, on va juste plugger un générateur dans la couche d’infrastructure, à côté du repo.
+    - Aussi, vu que le Repository a la liste en mémoire, c’est à lui de vérifier si l’email existe déjà.
+  - Le service reçoit le nouvel account ID.
+  - Il envoie un courriel au email avec l’account ID.
+    - Ça, ça se passe avec une couche SMTP et une couche de filesystem. Pourquoi filesystem? Parce que, dans l’environnement local, on va aller chercher les infos du courriel SMTP pour envoyer le courriel avec un fichier.
+  - Il retourne ça à la couche REST.
+
+Aussi, au travers de ça, y’a des exceptions mappers. C’est parce que dans l’app, les exceptions, c’est des classes qu’on throw. Le HTTP, c’est la couche REST qui le gère, avec un exception mapper. Évidemment, dans le repo, quand l’email existe déjà, c’est pas là qu’on gère le fait que c’est un 404 NOT FOUND, on est dans la couche d’infra, de BD. On lance une exception et la couche REST le pogne.
+
+## Note sur le setup du projet
+
+Ouin, ok pis on a besoin de d’autres tâches. Faut ben setuper le projet.
+
+À partir de cet article, vous pouvez pas mal deviner le reste des articles que j’vais sortir. Chaque problème à résoudre ici est un concept de plus à couvrir sur le site. Si vous voulez que je couvre de quoi dites-moi le pis j’vais prioriser ça!
+
+Donc, pour le setup du projet, on a besoin de :
+
+- Créer un boilerplate, une base de projet, en Maven
+- Plugger Dependabot pour les nouveaux packages
+- Un CI, [Continuous Integration](https://www.cloudbees.com/continuous-delivery/continuous-integration)
+- Un CD, [Continuous Deployment](https://searchitoperations.techtarget.com/definition/continuous-deployment)
+- Uploader nos rapports de code coverage
+- Des requêtes Postman pour tester ça
+- Des tests end-to-end Postman
+- Une documentation d’API
+
+## Écriture des issues de la première itération
+
+Ok les chums on a du pain sur la planche. J’vais utiliser les templates d’issues de feature request que j’ai fais au dernier article, sur les bases d’un repo GitHub.
+
 ___
 
-Good, là j’vous averti, on s’en ligne un peu technique. J’vais faire une vidéo qui couvre le sujet soon, mais live j’vais utiliser des termes pour décrire des concepts dans mon architecture hexagonale.
-So, on va faire un p’tit plan de l’archi. En gros :
-On a, au centre, notre domaine. Ça, c’est pure, c’est nos règles de domaine et comment tout fonctionne. C’est les concepts qu’on a trouvé l’autre fois : les comptes, les utilisateurs, les passes, les factures, pis toute ça. Les classes vont avoir ces noms là pas mal.
-Tout le tour de l’app, c’est les ports vers des technos externes. Genre :
-la couche REST, qui répond à des calls HTTP en JSON
-On va utiliser des classes Resource, qui représentent les point d’accès de la couche REST, les endpoints, les URIs vers nos objets et collections
-la couche d’infrastructure, qui est pas mal notre BD.
-On pourrait avoir des Repository, genre “get”, “save”, “update”, qui couvre les aspects techniques de la BD, quelle soit in-memory, sql, nosql, wtv. Si on avait une BD complexe, des DAO, Data Access Object, qui représentent les tables de la BD, pourrait être pratiques, mais pas dans notre cas! On veut un accès simple à la mémoire dans la RAM.
-les clients, qui utilisent d’autres API
-le système sur lequel l’app roule
-SMTP, pour les courriels
-la fucking console, pis ben d’autres affaires
-C’est comment notre app communique avec d’autres softwares, en gros.
-Pour coller tout ça ensemble, on a un service layer. Un service représente souvent un use case. Pour faire cute, on dit que ça “orchestre le domaine”. Estie que c’est magnifique. Sais-tu comment ça s’appelle un test unitaire pour un service? Vu que ça sert juste à appeler les classes qui s’occupent de la logique, on veut juste voir si les données sont passées aux bons endroits dans le bon ordre, c’t’un “test d’orchestration”. Ça veut tellement rien dire pis j’aime ça.
-Si un service pue, il ressemble à une god class. Si ton domaine est assez intelligent, si il a assez de logique pour se régler lui-même, tes services vont être ben beau ben cute. La preuve, c’est ça qu’on va faire.
-Ok!
-Le flow normal de notre archi, ou en tout cas celui pour la création de compte / utilisateur, c’est :
-Le JSON est mappé en objet de requête par la Resource, dans la couche d’API. La Resource l’envoie au service pis répond 201 CREATED avec le endpoint du nouvel account, soit son nouvel ID.
-Le service, le service, le service, y fait ben des affaires.
-D’abord, il assemble la requête en objet valide. Cet assemblage-là est gère par une classe à part qui throw des exceptions pour les différentes raisons que le data est invalide.
-Oublions pas, la validation d’email existant, c’est pas live. On a besoin des données enregistrées dans l’app pour ça.
-Le service reçoit l’objet Account, avec son User, valide.
-Il l'envoie au Repository. Celui-là l’enregistre dans une liste en mémoire.
-Le Repository crée aussi son ID. On pourrait techniquement faire ça à l’assemblage, mais c’est pratique commune de laisser la BD gérer les références autogénérées. Nous, on va juste plugger un générateur dans la couche d’infrastructure, à côté du repo.
-Aussi, vu que le Repository a la liste en mémoire, c’est à lui de vérifier si l’email existe déjà.
-Le service reçoit le nouvel account ID.
-Il envoie un courriel au email avec l’account ID.
-Ça, ça se passe avec une couche SMTP et une couche de filesystem. Pourquoi filesystem? Parce que, dans l’environnement local, on va aller chercher les infos du courriel SMTP pour envoyer le courriel avec un fichier.
-Il retourne ça à la couche REST.
-Aussi, au travers de ça, y’a des exceptions mappers. C’est parce que dans l’app, les exceptions, c’est des classes qu’on throw. Le HTTP, c’est la couche REST qui le gère, avec un exception mapper. Évidemment, dans le repo, quand l’email existe déjà, c’est pas là qu’on gère le fait que c’est un 404 NOT FOUND, on est dans la couche d’infra, de BD. On lance une exception et la couche REST le pogne.
-Note sur le setup du projet
-Ouin ok pis on a besoin de d’autres tâches. Faut ben setuper le projet.
-À partir de cette vidéo, vous pouvez pas mal deviner le reste des vidéos que j’vais sortir. Chaque problème à résoudre icitte est un concept de plus à couvrir dans le channel. Si vous voulez que je couvre de quoi dites-moi le pis j’vais prioriser ça haha
-Donc, pour le setup du projet, on a besoin de :
-Créer un boilerplate, une base de projet, en Maven
-Plugger Dependabot pour les nouveaux packages
-Un CI
-Un CD
-Uploader nos rapports de code coverage
-Des requêtes Postman pour tester ça
-Des tests end-to-end Postman
-Une documentation d’API
-Écriture des issues de la première itération
-Ok les chums on a du pain sur la planche. J’vais utiliser les templates d’issues de feature request que j’ai fais au dernier vidéo, sur les bases d’un repo GitHub.
 Add resource for POST /accounts
 Première étape : on ajoute la ressource pour POST /accounts. Elle doit recevoir la requête, l’envoyer au service, faire 202 CREATED et répondre le nouveau ID.
 J’vais m’assigner sur chaque tâche, mettre le projet et le milestone. J’vais faire une étiquette “use-cases-1” pour indiquer quel groupe de use cases on règle. On pourrait aussi faire des étiquettes pour les couches de l’archi, mais bof.
